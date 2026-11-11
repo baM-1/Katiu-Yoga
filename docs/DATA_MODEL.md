@@ -15,6 +15,7 @@ erDiagram
     attendances |o--o| payments : "paga una clase"
     pack_purchases |o--o{ payments : "paga un bono"
     students ||--o{ reminder_logs : "recibe"
+    users ||--o{ audit_events : "hace"
 
     plans {
         int id PK
@@ -57,6 +58,20 @@ erDiagram
         int id PK
         int classes_total
         date expires_on
+    }
+    users {
+        int id PK
+        str email
+        bool active
+        bool is_admin "ve /admin"
+    }
+    audit_events {
+        int id PK
+        datetime at
+        enum action "login | student_updated | ..."
+        enum target_type "student | class | slot | user"
+        int target_id "sin datos personales"
+        str detail "corto, nunca texto libre"
     }
 ```
 

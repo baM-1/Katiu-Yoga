@@ -40,6 +40,11 @@ KATIU_DATABASE_URL=sqlite:///data/demo.db uv run fastapi dev   # demo@katiu.loca
 Piloto en Fly.io (París) con copia continua en Cloudflare R2. Guía paso a paso en
 [`docs/DEPLOY.md`](docs/DEPLOY.md) y razones en [ADR-0006](docs/adr/0006-despliegue-fly-litestream.md).
 
+## Panel de Admin
+`/admin` (Más → Panel de Admin), solo para administradores: usuarios, actividad, estado de la
+copia y exportar a Excel. Cómo darte acceso en [`docs/DEPLOY.md`](docs/DEPLOY.md#panel-de-admin);
+razones en [ADR-0007](docs/adr/0007-panel-admin-roles-auditoria.md).
+
 ## Datos personales (RGPD)
 
 El Excel original va en `data/raw/` y la base de datos en `data/katiu.db`. **Ninguno de los dos
@@ -59,6 +64,8 @@ src/katiu/
 ├── dashboard/
 ├── reminders/
 ├── accounts/        # usuarios y login
+├── admin/           # Panel de Admin (solo is_admin)
+├── audit/           # registro de actividad (solo añadir)
 ├── settings/        # menú Más, horario y contraseña
 ├── importing/       # importación del Excel
 ├── templates/       # base.html y parciales compartidos

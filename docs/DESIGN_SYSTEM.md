@@ -52,6 +52,9 @@ de la lista 64 px.
 | Navegación | `.tabbar` | Hoy · Alumnos · Dinero · Más |
 | Divisor | `partials/divider.html` | dos trazos y la estrella del logo, en coral |
 | Formulario | `.field`, `.form-row`, `.check`, `.form-actions` | editar ficha; fechas sin desbordar |
+| Estado | `.status--ok/warn/danger` | tarjeta con borde de color (copia de seguridad) |
+| Cifras | `.stats`, `.stat` | tres números grandes en serif |
+| Línea de tiempo | `.timeline`, `.timeline__item--alert` | actividad; punto rojo = intento fallido |
 | Iconos | `{{ icon("sun") }}` | Lucide inline, `currentColor` |
 
 ## Microinteracciones
