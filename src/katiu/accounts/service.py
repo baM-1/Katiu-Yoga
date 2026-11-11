@@ -69,3 +69,61 @@ def reset_password(session: Session, email: str, new: str) -> User:
     session.add(user)
     session.commit()
     return user
+
+
+def admin_create_user(
+    session: Session, email: str, display_name: str, password: str, *, is_admin: bool = False
+) -> User:
+    """Alta desde el Panel de Admin: valida nombre y email además de la contraseña."""
+    clean_email = email.strip().lower()
+    if "@" not in clean_email or "." not in clean_email.split("@")[-1]:
+        raise AccountError("Ese email no parece válido.")
+    if not display_name.strip():
+        raise AccountError("Falta el nombre.")
+    user = create_user(session, clean_email, display_name, password)
+    if is_admin:
+        user.is_admin = True
+        session.add(user)
+        session.commit()
+    return user
+
+
+def set_password(session: Session, user_id: int, new: str) -> User:
+    """Un admin pone una contraseña nueva a otro usuario (sin pedir la actual)."""
+    user = session.get(User, user_id)
+    if user is None:
+        raise AccountError("Ese usuario no existe.")
+    return reset_password(session, user.email, new)
+
+
+def set_active(session: Session, actor: User, user_id: int, active: bool) -> User:
+    """Activa o desactiva una cuenta. Nadie puede desactivarse a sí mismo ni dejar la app
+    sin ningún administrador activo (te quedarías fuera de tu propio panel)."""
+    user = session.get(User, user_id)
+    if user is None:
+        raise AccountError("Ese usuario no existe.")
+    if not active:
+        if user.id == actor.id:
+            raise AccountError("No puedes desactivar tu propia cuenta.")
+        if user.is_admin:
+            admins = UserRepository(session).active_admins()
+            if len([a for a in admins if a.id != user.id]) == 0:
+                raise AccountError("Tiene que quedar al menos un administrador activo.")
+    user.active = active
+    session.add(user)
+    session.commit()
+    return user
+
+
+def make_admin(session: Session, email: str) -> User:
+    user = UserRepository(session).by_email(email)
+    if user is None:
+        raise AccountError("No existe un usuario con ese email.")
+    user.is_admin = True
+    session.add(user)
+    session.commit()
+    return user
+
+
+def all_users(session: Session) -> list[User]:
+    return UserRepository(session).ordered()

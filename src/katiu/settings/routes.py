@@ -8,6 +8,8 @@ from fastapi.responses import HTMLResponse, RedirectResponse, Response
 from sqlmodel import col, select
 
 from katiu.accounts.service import AccountError, change_password
+from katiu.audit import service as audit
+from katiu.audit.models import AuditAction, AuditTarget
 from katiu.classes import service as classes
 from katiu.classes.models import Plan, PlanKind
 from katiu.core import clock
@@ -85,9 +87,10 @@ def add_slot(
     duration_min: Annotated[int, Form()] = 60,
 ) -> Response:
     try:
-        classes.add_slot(db, weekday, start_time, plan_id, duration_min)
+        slot = classes.add_slot(db, weekday, start_time, plan_id, duration_min)
     except classes.ClassError as exc:
         return _schedule_page(request, db, error=str(exc), status=422)
+    audit.record(db, user.id, AuditAction.SLOT_ADDED, AuditTarget.SLOT, slot.id)
     classes.generate_sessions(db, clock.today())
     return RedirectResponse("/ajustes/horario?ok=franja", status_code=303)
 
@@ -98,6 +101,7 @@ def pause_slot(request: Request, db: DbSession, user: CurrentUser, slot_id: int)
         classes.deactivate_slot(db, slot_id, clock.today())
     except classes.ClassError as exc:
         return _schedule_page(request, db, error=str(exc), status=404)
+    audit.record(db, user.id, AuditAction.SLOT_PAUSED, AuditTarget.SLOT, slot_id)
     return RedirectResponse("/ajustes/horario?ok=pausa", status_code=303)
 
 
@@ -115,6 +119,7 @@ def extra_class(
         cls = classes.create_extra_class(db, day, start_time, plan_id, duration_min)
     except classes.ClassError as exc:
         return _schedule_page(request, db, error=str(exc), status=422)
+    audit.record(db, user.id, AuditAction.EXTRA_CLASS, AuditTarget.CLASS, cls.id)
     return RedirectResponse(f"/clases/{cls.id}", status_code=303)
 
 
@@ -137,6 +142,7 @@ def password_change(
         return templates.TemplateResponse(
             request, "password.html", {"section": "mas", "error": str(exc)}, status_code=422
         )
+    audit.record(db, user.id, AuditAction.PASSWORD_CHANGED, AuditTarget.USER, user.id)
     return templates.TemplateResponse(
         request, "password.html", {"section": "mas", "message": "Contraseña cambiada ✓"}
     )

@@ -6,6 +6,8 @@ from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, Response
 
 from katiu.attendance import service
+from katiu.audit import service as audit
+from katiu.audit.models import AuditAction, AuditTarget
 from katiu.classes.models import ClassSession, Plan
 from katiu.core import clock
 from katiu.core.security import verify_csrf
@@ -46,6 +48,10 @@ def roll_call(request: Request, db: DbSession, user: CurrentUser, class_id: int)
     )
 
 
+def _when(cls: ClassSession) -> str:
+    return f"{cls.date:%d/%m} {cls.start_time:%H:%M}"
+
+
 def _item_response(request: Request, db: DbSession, class_id: int, student_id: int) -> Response:
     """Devuelve la tarjeta actualizada + la barra de totales (fuera de banda, hx-swap-oob)."""
     return templates.TemplateResponse(
@@ -63,11 +69,15 @@ def _item_response(request: Request, db: DbSession, class_id: int, student_id: i
 def toggle_attendance(
     request: Request, db: DbSession, user: CurrentUser, class_id: int, student_id: int
 ) -> Response:
-    _class_or_404(db, class_id)
+    cls, _ = _class_or_404(db, class_id)
     try:
-        service.toggle_attendance(db, class_id, student_id)
+        came = service.toggle_attendance(db, class_id, student_id)
     except service.AttendanceError as exc:
         raise HTTPException(404, str(exc)) from exc
+    detail = f"{_when(cls)} · {'vino' if came else 'quitado'}"
+    audit.record(
+        db, user.id, AuditAction.ATTENDANCE_TOGGLED, AuditTarget.STUDENT, student_id, detail
+    )
     return _item_response(request, db, class_id, student_id)
 
 
@@ -75,11 +85,13 @@ def toggle_attendance(
 def toggle_paid(
     request: Request, db: DbSession, user: CurrentUser, class_id: int, student_id: int
 ) -> Response:
-    _class_or_404(db, class_id)
+    cls, _ = _class_or_404(db, class_id)
     try:
-        service.toggle_paid(db, class_id, student_id, clock.today())
+        paid = service.toggle_paid(db, class_id, student_id, clock.today())
     except service.AttendanceError as exc:
         raise HTTPException(404, str(exc)) from exc
+    detail = f"{_when(cls)} · {'pagado' if paid else 'deshecho'}"
+    audit.record(db, user.id, AuditAction.PAYMENT_TOGGLED, AuditTarget.STUDENT, student_id, detail)
     return _item_response(request, db, class_id, student_id)
 
 
@@ -92,7 +104,7 @@ def quick_add(
     full_name: Annotated[str, Form()],
     phone: Annotated[str, Form()] = "",
 ) -> Response:
-    _class_or_404(db, class_id)
+    cls, _ = _class_or_404(db, class_id)
     try:
         student = service.quick_add(db, class_id, full_name, phone or None)
     except StudentError as exc:
@@ -103,6 +115,7 @@ def quick_add(
             status_code=422,
             headers={"HX-Retarget": "#quick-add-error", "HX-Reswap": "innerHTML"},
         )
+    audit.record(db, user.id, AuditAction.QUICK_ADD, AuditTarget.STUDENT, student.id, _when(cls))
     response = _item_response(request, db, class_id, student.id or 0)
     response.headers["HX-Retarget"] = "#roster-attended"
     response.headers["HX-Reswap"] = "afterbegin"
