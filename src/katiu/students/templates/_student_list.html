@@ -1,0 +1,17 @@
+{% from "partials/icons.html" import icon with context %}
+<ul class="list" id="student-list" role="list">
+  {% for s in students %}
+  <li>
+    <a class="list-row" href="/alumnos/{{ s.id }}">
+      <span class="avatar" aria-hidden="true">{{ initials(s.full_name) }}</span>
+      <span class="list-row__main">
+        <b>{{ s.full_name }}</b>
+        <span>{% if not s.active %}Inactivo · {% endif %}{% if s.started_on %}Desde {{ month_year(s.started_on) }}{% else %}Sin fecha de inicio{% endif %}</span>
+      </span>
+      {{ icon("chevron") }}
+    </a>
+  </li>
+  {% else %}
+  <li class="empty"><p>{{ "Nadie se llama así… ¿alumno nuevo?" if q else "Todavía no hay alumnos." }}</p></li>
+  {% endfor %}
+</ul>

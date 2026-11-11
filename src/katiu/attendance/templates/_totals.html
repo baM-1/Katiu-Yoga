@@ -1,0 +1,5 @@
+<div class="totals" id="totals" role="status" aria-live="polite"{% if oob %} hx-swap-oob="true"{% endif %}>
+  <span>{{ totals.people }} {{ "persona" if totals.people == 1 else "personas" }}</span>
+  <span>Cobrado <b>{{ eur(totals.collected_cents, decimals=false) }}</b></span>
+  <span>Pendiente <b>{{ eur(totals.pending_cents, decimals=false) }}</b></span>
+</div>
