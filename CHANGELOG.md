@@ -6,6 +6,25 @@ Versionado: [SemVer](https://semver.org/lang/es/).
 
 ## [Sin publicar]
 
+### Añadido (Fase 1: cimientos y datos limpios)
+- Modelo de datos con SQLModel: planes, horario recurrente, clases, alumnos, asistencias, pagos,
+  bonos y registro de recordatorios. Diagrama ER en `docs/DATA_MODEL.md` y ADR-0003.
+- Catálogo de tarifas 2026: individual presencial y online, y grupal, con clase suelta y bonos de
+  4 y 8 clases (60 días).
+- `core/money.py` (céntimos y formato en euros), `core/db.py` (SQLite en modo WAL con claves
+  foráneas activadas) y un repositorio base con repositorios por módulo.
+- Migraciones con Alembic (esquema inicial) y un test que comprueba que coinciden con los modelos.
+- `scripts/import_excel.py`: importación idempotente del Excel con limpieza de teléfonos
+  (E.164), nombres, fechas en texto y filas corridas, más un informe de anomalías y un cuadre con
+  RESUMEN_MENSUAL.
+- 51 tests (reglas de limpieza, dinero, importación, idempotencia y migraciones) sobre un Excel
+  ficticio.
+
+### Corregido
+- La lectura de CATALOGOS mezclaba sus dos tablas porque repiten la cabecera "Tipo_de_clase".
+
+## Fase 0
+
 ### Añadido
 - Fase 0: esqueleto del proyecto con uv y Python 3.13, organizado como monolito modular
   (`core`, `students`, `classes`, `attendance`, `payments`, `dashboard`, `reminders`).
