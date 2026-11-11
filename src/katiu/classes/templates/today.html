@@ -7,15 +7,15 @@
   </div>
   <span class="logo" role="img" aria-label="Katiu Yoga"></span>
 </header>
-{% include "partials/wave.html" %}
+{% include "partials/divider.html" %}
 
 {% if todays %}
-  <p class="lede">{{ "Hoy tienes una clase" if todays | length == 1 else "Hoy tienes " ~ (todays | length) ~ " clases" }} 🌊</p>
+  <p class="lede">{{ "Hoy tienes una clase" if todays | length == 1 else "Hoy tienes " ~ (todays | length) ~ " clases" }}. Que fluya el prana.</p>
   <div class="stack mt-4">
     {% for card in todays %}{% with is_today=true %}{% include "_class_card.html" %}{% endwith %}{% endfor %}
   </div>
 {% else %}
-  <p class="lede">Hoy no hay clase. Día de mar 🏄‍♀️</p>
+  <p class="lede">Hoy no hay clase. Savasana oficial.</p>
 {% endif %}
 
 {% if upcoming %}

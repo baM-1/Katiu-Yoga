@@ -21,7 +21,7 @@ uv run fastapi dev           # http://127.0.0.1:8000
 ### Probar con datos ficticios
 ```bash
 KATIU_DATABASE_URL=sqlite:///data/demo.db uv run python scripts/seed_demo.py
-KATIU_DATABASE_URL=sqlite:///data/demo.db uv run fastapi dev   # demo@katiu.local / demo-olas
+KATIU_DATABASE_URL=sqlite:///data/demo.db uv run fastapi dev   # demo@katiu.local / demo-namaste
 ```
 
 ## Comandos del día a día

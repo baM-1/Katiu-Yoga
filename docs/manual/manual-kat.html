@@ -1,0 +1,148 @@
+<!doctype html>
+<!-- Manual de uso de una hoja (A4) para Kat. Fuente del PDF manual-kat.pdf:
+     se genera con Chrome → Imprimir → Guardar como PDF (A4, sin márgenes extra).
+     Actualizarlo cada vez que la app gane o cambie una función. -->
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Katiu Yoga · Tu app en una hoja</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --oceano: #14384A; --oceano-profundo: #0C2734; --arena: #FBF7EF; --espuma: #FFFFFF;
+    --turquesa-tinta: #0F7480; --coral: #FF8A66; --alga: #2E7D5B; --miel: #8A5D00;
+    --muted: #3F6676; --linea: #E8DFCC; --espuma-tinte: #D5F0EC; --coral-tinte: #FFE0D3;
+  }
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    width: 210mm; height: 297mm; padding: 11mm 13mm 9mm; background: var(--arena); color: var(--oceano);
+    font: 400 9.4pt/1.38 Inter, system-ui, sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    display: flex; flex-direction: column; gap: 3.2mm;
+  }
+  h1, h2 { font-family: Newsreader, Georgia, serif; color: var(--oceano-profundo); margin: 0; }
+  h1 { font-size: 24pt; font-weight: 500; line-height: 1.05; }
+  h1 em { color: var(--turquesa-tinta); }
+  h2 { font-size: 13pt; font-weight: 600; margin-bottom: 1.4mm; }
+  p { margin: 0; }
+  ul { margin: 0; padding-left: 4.2mm; }
+  li { margin: 0.5mm 0; }
+  b { font-weight: 600; color: var(--oceano-profundo); }
+  .head { display: flex; align-items: center; gap: 6mm; }
+  .head img { width: 26mm; }
+  .head p { color: var(--muted); margin-top: 1.2mm; }
+  .url { font-weight: 600; color: var(--turquesa-tinta); }
+  .card { background: var(--espuma); border: 1px solid var(--linea); border-radius: 4mm; padding: 3.2mm 4mm; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3.2mm; }
+  .tab { display: inline-block; font-size: 7.6pt; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+         color: var(--turquesa-tinta); margin-bottom: .8mm; }
+  .si { background: var(--espuma-tinte); border-color: transparent; }
+  .no { background: var(--coral-tinte); border-color: transparent; }
+  .si h2::before { content: "✓ "; color: var(--alga); }
+  .no h2::before { content: "✗ "; color: #A3412A; }
+  .steps { counter-reset: s; list-style: none; padding: 0; }
+  .steps li { counter-increment: s; padding-left: 6mm; position: relative; }
+  .steps li::before { content: counter(s); position: absolute; left: 0; top: .2mm; width: 4.2mm; height: 4.2mm;
+    border-radius: 50%; background: var(--turquesa-tinta); color: #fff; font-size: 7pt; font-weight: 600;
+    display: grid; place-items: center; }
+  .foot { margin-top: auto; display: flex; justify-content: space-between; color: var(--muted); font-size: 8pt;
+          border-top: 1px dashed var(--linea); padding-top: 2mm; }
+  .foot i { font-family: Newsreader, Georgia, serif; font-size: 10pt; }
+</style>
+</head>
+<body>
+
+<header class="head">
+  <img src="logo-katiu-yoga.svg" alt="Katiu Yoga">
+  <div>
+    <h1>Tu app en <em>una hoja</em></h1>
+    <p>Para pasar lista y llevar las cuentas sin papel. Menos Excel, más savasana.</p>
+  </div>
+</header>
+
+<section class="grid">
+  <div class="card">
+    <h2>Entrar</h2>
+    <ul class="steps">
+      <li>Abre <span class="url">katiu-yoga.fly.dev</span> en Safari.</li>
+      <li>Escribe tu email y tu contraseña. Deja que el iPhone la guarde.</li>
+      <li>Toca <b>•••</b> → <b>Compartir</b> → <b>Añadir a pantalla de inicio</b>. Ya tienes el icono.</li>
+    </ul>
+    <p style="margin-top:1.4mm;color:var(--muted)">Si tarda 2 segundos en abrir, es que estaba meditando: se duerme cuando nadie la usa.</p>
+  </div>
+  <div class="card">
+    <h2>Abajo tienes 4 pestañas</h2>
+    <ul>
+      <li><b>Hoy</b>: las clases de hoy y las próximas.</li>
+      <li><b>Alumnos</b>: la lista de todos, con buscador.</li>
+      <li><b>Dinero</b>: todavía en construcción.</li>
+      <li><b>Más</b>: tu horario, clases extra, contraseña y salir.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="card">
+  <span class="tab">Lo de cada clase</span>
+  <h2>Pasar lista en 3 toques</h2>
+  <div class="grid" style="gap:5mm">
+    <ul class="steps">
+      <li>En <b>Hoy</b>, toca la clase.</li>
+      <li>Toca el nombre de quien vino: queda en verde con el precio.</li>
+      <li>Si pagó, toca <b>€ Pendiente</b> y pasa a <b>✓ Pagado</b> (se apunta como efectivo).</li>
+    </ul>
+    <ul>
+      <li>Los <b>habituales</b> de esa hora salen arriba. Usa <b>Buscar…</b> para el resto.</li>
+      <li>¿Alguien nuevo? <b>+ Alumno nuevo</b>: nombre y teléfono (opcional). Se añade y queda marcado.</li>
+      <li>¿Te equivocaste? Vuelve a tocar y se deshace. Si ya había pagado, te pregunta antes.</li>
+      <li>Abajo ves en vivo lo <b>cobrado</b> y lo <b>pendiente</b>.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="grid">
+  <div class="card si">
+    <h2>Lo que SÍ puedes hacer hoy</h2>
+    <ul>
+      <li>Pasar lista y marcar quién pagó.</li>
+      <li>Dar de alta a un alumno nuevo desde la clase.</li>
+      <li>Ver la ficha de cada alumno: datos, <b>salud</b> (solo ahí, protegida), notas y sus últimas clases.</li>
+      <li>Ver el <b>saldo</b> de cada alumno: si debe, si tiene a favor o si está al día.</li>
+      <li><b>Editar</b> la ficha (botón <b>Editar</b>): nombre, teléfono, email, fechas, tarifa, <b>salud</b> y notas.</li>
+      <li>Pasar a alguien a <b>inactivo</b>: deja de salir en las listas, pero no se borra nada.</li>
+      <li>Escribirle por <b>WhatsApp</b> con un toque desde su ficha.</li>
+      <li>Cambiar tu horario fijo, pausar una hora o crear una <b>clase extra</b>.</li>
+      <li>Cambiar tu contraseña (Más → Contraseña).</li>
+    </ul>
+  </div>
+  <div class="card no">
+    <h2>Lo que todavía NO puedes</h2>
+    <ul>
+      <li>Borrar del todo a un alumno (mejor: pásalo a inactivo).</li>
+      <li>Elegir Bizum o transferencia: de momento todo pago es efectivo.</li>
+      <li>Apuntar un pago suelto fuera de una clase, o vender bonos.</li>
+      <li>Ver quién debe ni los ingresos del mes (pestaña <b>Dinero</b>).</li>
+      <li>Recordatorios automáticos por WhatsApp.</li>
+    </ul>
+    <p style="margin-top:1.4mm">Mientras tanto, apúntalo y díselo a Lalo: lo corrige él. Todo esto llega en las próximas versiones.</p>
+  </div>
+</section>
+
+<section class="grid">
+  <div class="card">
+    <h2>Tranquila, no se pierde nada</h2>
+    <p>Cada toque se guarda al momento y se copia a un servidor de la UE. Si cambias de móvil, entras con tu email y está todo igual.</p>
+  </div>
+  <div class="card">
+    <h2>Si algo falla</h2>
+    <p>Sin cobertura no se puede marcar: espera a tener red y recarga. ¿Olvidaste la contraseña? Lalo te pone una nueva. ¿Algo raro? Haz una captura y mándasela.</p>
+  </div>
+</section>
+
+<footer class="foot">
+  <span>Katiu Yoga · versión piloto · noviembre 2026</span>
+  <i>Inhala, toca, exhala. Namasté 🙏</i>
+</footer>
+
+</body>
+</html>

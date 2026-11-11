@@ -6,6 +6,19 @@ Versionado: [SemVer](https://semver.org/lang/es/).
 
 ## [Sin publicar]
 
+### Añadido (primeras observaciones de Kat)
+- **Editar ficha de alumno**: nombre, teléfono, email, fechas, ubicación, tarifa habitual,
+  salud, notas, activo/inactivo y consentimiento de WhatsApp (guarda la fecha; se borra al
+  retirarlo). Valida antes de guardar y conserva lo escrito si hay un error.
+- **Manual de una hoja (A4)** para Kat en `docs/manual/` (HTML fuente + PDF).
+
+### Cambiado (primeras observaciones de Kat)
+- Textos sin surf: yoga y sánscrito con humor. La ola decorativa pasa a ser un divisor con la
+  estrella del logo.
+- Logo en SVG (nítido a cualquier tamaño).
+- Service worker: estáticos con *stale-while-revalidate* y versión `katiu-v2`, para que los
+  cambios de diseño lleguen al móvil sin reinstalar.
+
 ### Añadido (piloto)
 - **Despliegue en Fly.io** (Madrid): `Dockerfile` multietapa sin datos ni secretos, `fly.toml`
   con health check en `/salud` y apagado automático. ADR-0006.

@@ -28,7 +28,7 @@ def render_markdown(report: ImportReport, source_name: str) -> str:
             f"| {a.sheet} | {a.ref} | {a.problem} | {a.resolution} |" for a in report.anomalies
         ]
     else:
-        lines.append("Ninguna. 🌊")
+        lines.append("Ninguna. Todo en equilibrio.")
 
     rec = report.reconciliation
     mismatches = [r for r in rec if not r.matches]

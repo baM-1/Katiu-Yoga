@@ -3,7 +3,7 @@
 Uso:
     KATIU_DATABASE_URL=sqlite:///data/demo.db uv run python scripts/seed_demo.py
     KATIU_DATABASE_URL=sqlite:///data/demo.db uv run fastapi dev
-    → entra con demo@katiu.local / demo-olas
+    → entra con demo@katiu.local / demo-namaste
 """
 
 import random
@@ -40,7 +40,7 @@ def main() -> None:
         seed_current_plans(db, ImportReport())
         db.commit()
         if not UserRepository(db).by_email("demo@katiu.local"):
-            create_user(db, "demo@katiu.local", "Kat", "demo-olas")
+            create_user(db, "demo@katiu.local", "Kat", "demo-namaste")
         group = db.exec(select(Plan).where(Plan.name == "Grupal presencial · clase suelta")).one()
         if not db.exec(select(ScheduleSlot)).first():
             for start in (time(9, 0), time(10, 15)):
@@ -71,7 +71,7 @@ def main() -> None:
                         if rnd.random() < 0.85:
                             toggle_paid(db, cls.id or 0, s.id or 0, cls.date)
         classes.generate_sessions(db, today)
-    print("✓ Demo lista: demo@katiu.local / demo-olas")
+    print("✓ Demo lista: demo@katiu.local / demo-namaste")
 
 
 if __name__ == "__main__":

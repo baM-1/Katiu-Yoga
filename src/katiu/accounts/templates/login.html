@@ -6,7 +6,7 @@
 <section class="login">
   <span class="logo login__logo" role="img" aria-label="Katiu Yoga"></span>
   <p class="lede mt-4">Tu práctica. Tu ritmo. Tu espacio.</p>
-  {% include "partials/wave.html" %}
+  {% include "partials/divider.html" %}
   <form method="post" action="/entrar" class="stack mt-4">
     <input type="hidden" name="csrf_token" value="{{ csrf(request) }}">
     {% if error %}<p class="notice notice--error" role="alert">{{ error }}</p>{% endif %}
