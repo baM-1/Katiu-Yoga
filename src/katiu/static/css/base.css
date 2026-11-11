@@ -7,7 +7,7 @@ body {
   min-height: 100dvh;
   background: var(--bg);
   color: var(--text);
-  font: 400 1.0625rem/1.55 var(--font-body);
+  font: 400 1rem/1.55 var(--font-body);
 }
 
 .page {
@@ -16,30 +16,35 @@ body {
   padding: calc(var(--space) * 3) var(--space);
 }
 
-.hero { padding-top: 12vh; }
+.hero { padding-top: 10vh; }
 
-.eyebrow {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: .8125rem;
-  letter-spacing: .14em;
-  text-transform: uppercase;
+/* El logo es un PNG usado como máscara: una sola imagen que se pinta con var(--logo),
+   así respeta los colores oficiales en modo claro y oscuro sin alterar su forma. */
+.logo {
+  display: block;
+  width: 9.5rem;
+  aspect-ratio: 560 / 484;
+  background: var(--logo);
+  mask: url("../img/logo-katiu-yoga.png") center / contain no-repeat;
+  -webkit-mask: url("../img/logo-katiu-yoga.png") center / contain no-repeat;
 }
 
 h1 {
-  margin: .25rem 0 .75rem;
-  font: 700 clamp(2.5rem, 11vw, 3.75rem)/1.05 var(--font-display);
-  font-variation-settings: "SOFT" 100, "WONK" 1;
+  margin: 2.5rem 0 .5rem;
+  font: 600 clamp(2.25rem, 10vw, 3.25rem)/1.1 var(--font-display);
   letter-spacing: -.01em;
 }
 
-.lede { margin: 0; color: var(--text-muted); max-width: 26rem; }
-
-.wave { display: block; width: 100%; max-width: 20rem; margin: 2rem 0 1.25rem; color: var(--accent); }
+.lede {
+  margin: 0;
+  max-width: 26rem;
+  color: var(--accent-ink);
+  font: italic 400 1.125rem/1.5 var(--font-display);
+}
 
 .soon {
   display: inline-block;
-  margin: 0;
+  margin: 2rem 0 0;
   padding: .5rem .9rem;
   border-radius: 999px;
   background: var(--surface);

@@ -1,24 +1,31 @@
-/* Tokens "Boho Surf": la única fuente de color, tipografía y forma.
-   Los componentes usan siempre var(--token), nunca un hex suelto. */
+/* Tokens de marca Katiu Yoga (Pautas de diseño 2026).
+   Única fuente de color, tipografía y forma: los componentes usan var(--token), nunca un hex suelto.
+   Los hex se han muestreado del manual de marca (sus códigos impresos no coinciden con los
+   colores reales; ver docs/adr/0002-identidad-de-marca.md). */
 :root {
-  --sand: #F3E9DC;
-  --linen: #FBF7F1;
-  --terracotta: #C8643B;
-  --clay: #A44A2A;
-  --sage: #8A9A7B;
-  --ocean: #2F5D62;
-  --sea-foam: #A7C4BC;
-  --sun: #E9B44C;
-  --driftwood: #6B5B4E;
+  /* Paleta de marca */
+  --bosque: #3D4A3B;      /* primario A: texto fuerte, navegación, logo */
+  --lino: #F3EEE4;        /* primario B: fondo */
+  --papel: #FAF8F4;       /* tarjetas (como en la lista de precios) */
+  --terracota: #CC6633;   /* primario C: acentos grandes, estrella, iconos */
+  --terracota-tinta: #A8501F; /* terracota oscurecida para texto y botones (AA 4.7:1 sobre lino) */
+  --oliva: #667059;       /* primario D: éxito / asistió, texto secundario */
+  --arena: #C8B296;       /* primario E: bordes, separadores, pendiente */
 
-  --bg: var(--sand);
-  --surface: var(--linen);
-  --text: var(--ocean);
-  --text-muted: var(--driftwood);
-  --accent: var(--terracotta);
+  /* Roles semánticos: la interfaz usa estos, no los de arriba */
+  --bg: var(--lino);
+  --surface: var(--papel);
+  --text: var(--bosque);
+  --text-muted: var(--oliva);
+  --accent: var(--terracota);
+  --accent-ink: var(--terracota-tinta);
+  --line: var(--arena);
+  --logo: var(--bosque);
 
-  --font-display: "Fraunces", Georgia, serif;
-  --font-body: "DM Sans", system-ui, sans-serif;
+  /* Tipografía: la marca usa Abril Text (de pago). Newsreader es el sustituto libre más cercano;
+     si Kat tiene licencia web de Abril Text, basta cambiar --font-display. */
+  --font-display: "Newsreader", "Abril Text", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
 
   --radius-sm: 12px;
   --radius-md: 16px;
@@ -27,13 +34,16 @@
   --space: 1rem;
 }
 
-/* Modo oscuro "atardecer" */
+/* Modo oscuro "bosque de noche" */
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #1E2A2B;
-    --surface: #26363A;
-    --text: #F3E9DC;
-    --text-muted: #CDBBA7;
-    --accent: #E08A62;
+    --bg: #232B24;
+    --surface: #2E382F;
+    --text: var(--lino);
+    --text-muted: #A3A99B;
+    --accent: #D6855C;
+    --accent-ink: #E0A385;
+    --line: #4A564A;
+    --logo: var(--lino);
   }
 }
