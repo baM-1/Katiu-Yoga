@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% set f = form if form else none %}
+{% macro val(field, current) -%}{{ f[field] if f else (current if current is not none else "") }}{%- endmacro %}
+{% block title %}Editar · {{ s.full_name }} · Katiu Yoga{% endblock %}
+{% block content %}
+<a href="/alumnos/{{ s.id }}" class="back" aria-label="Volver a la ficha">{{ icon("back") }}</a>
+<header class="page-head"><div><p class="eyebrow">Editar ficha</p><h1>{{ s.full_name }}</h1></div></header>
+
+<form method="post" action="/alumnos/{{ s.id }}" class="stack mt-4">
+  <input type="hidden" name="csrf_token" value="{{ csrf(request) }}">
+  {% if error %}<p class="notice notice--error" role="alert">{{ error }}</p>{% endif %}
+
+  <div class="field">
+    <label for="full_name">Nombre</label>
+    <input class="input" id="full_name" name="full_name" required autocomplete="off" value="{{ val('full_name', s.full_name) }}">
+  </div>
+  <div class="field">
+    <label for="phone">Teléfono <small>(con prefijo, p. ej. +34)</small></label>
+    <input class="input" id="phone" name="phone" type="tel" inputmode="tel" placeholder="+34 600 000 000" value="{{ val('phone', s.phone_e164) }}">
+  </div>
+  <div class="field">
+    <label for="email">Email <small>(opcional)</small></label>
+    <input class="input" id="email" name="email" type="email" inputmode="email" autocomplete="off" value="{{ val('email', s.email) }}">
+  </div>
+  <div class="form-row">
+    <div class="field">
+      <label for="started_on">Con Kat desde</label>
+      <input class="input" id="started_on" name="started_on" type="date" value="{{ val('started_on', s.started_on) }}">
+    </div>
+    <div class="field">
+      <label for="birthday">Cumpleaños</label>
+      <input class="input" id="birthday" name="birthday" type="date" value="{{ val('birthday', s.birthday) }}">
+    </div>
+  </div>
+  <div class="field">
+    <label for="location">Ubicación <small>(opcional)</small></label>
+    <input class="input" id="location" name="location" value="{{ val('location', s.location) }}">
+  </div>
+  <div class="field">
+    <label for="default_plan_id">Tarifa habitual</label>
+    {% set current_plan = (f.default_plan_id if f else (s.default_plan_id | string if s.default_plan_id else "")) %}
+    <select class="input" id="default_plan_id" name="default_plan_id">
+      <option value="">Sin tarifa fija</option>
+      {% for plan in plans %}
+      <option value="{{ plan.id }}"{% if plan.id | string == current_plan %} selected{% endif %}>{{ plan.name }} · {{ eur(plan.price_cents, decimals=false) }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="health_notes">{{ icon("lock") }} Salud <small>(lesiones, embarazo, cuidados)</small></label>
+    <textarea class="input sensitive" id="health_notes" name="health_notes" rows="3" autocomplete="off">{{ val('health_notes', s.health_notes) }}</textarea>
+    <small>Dato sensible: solo se ve en la ficha, nunca en listas.</small>
+  </div>
+  <div class="field">
+    <label for="notes">Notas</label>
+    <textarea class="input" id="notes" name="notes" rows="3" autocomplete="off">{{ val('notes', s.notes) }}</textarea>
+  </div>
+
+  {% set is_active = f.active if f else s.active %}
+  <label class="check"><input type="checkbox" name="active" value="1"{% if is_active %} checked{% endif %}>
+    <span><b>Activo</b><small>Si lo desmarcas, deja de salir en la lista y al pasar lista. No se borra nada.</small></span></label>
+  {% set consent = f.whatsapp_consent if f else s.whatsapp_consent %}
+  <label class="check"><input type="checkbox" name="whatsapp_consent" value="1"{% if consent %} checked{% endif %}>
+    <span><b>Acepta mensajes por WhatsApp</b><small>Para recordatorios. Márcalo solo si te ha dicho que sí.</small></span></label>
+
+  <div class="form-actions">
+    <a class="btn btn--ghost" href="/alumnos/{{ s.id }}">Cancelar</a>
+    <button class="btn" type="submit">{{ icon("check") }} Guardar</button>
+  </div>
+</form>
+{% endblock %}

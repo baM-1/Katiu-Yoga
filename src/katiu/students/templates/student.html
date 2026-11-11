@@ -11,11 +11,13 @@
   </div>
 </header>
 
+{% if saved %}<p class="notice mt-4" role="status">¡Ficha guardada! Todo en su sitio, como un buen tadasana.</p>{% endif %}
+
 <div class="actions mt-4">
   {% set wa = whatsapp_url(s.phone_e164) %}
   {% if wa %}<a class="btn" href="{{ wa }}" target="_blank" rel="noopener">{{ icon("message") }} WhatsApp</a>
   {% else %}<span class="btn btn--ghost" aria-disabled="true">Sin teléfono</span>{% endif %}
-  <a class="btn btn--ghost" href="/">{{ icon("sun") }} Pasar lista</a>
+  <a class="btn btn--ghost" href="/alumnos/{{ s.id }}/editar">{{ icon("edit") }} Editar</a>
 </div>
 
 <section class="card mt-6">
@@ -41,6 +43,7 @@
     <dt>Con Kat desde</dt><dd>{% if s.started_on %}{{ human_date(s.started_on, weekday=false) }} de {{ s.started_on.year }}{% else %}—{% endif %}</dd>
     <dt>Cumpleaños</dt><dd>{% if s.birthday %}{{ human_date(s.birthday, weekday=false) }}{% else %}—{% endif %}</dd>
     <dt>Ubicación</dt><dd>{{ s.location or "—" }}</dd>
+    <dt>WhatsApp</dt><dd>{% if s.whatsapp_consent %}Acepta mensajes{% else %}Sin permiso aún{% endif %}</dd>
   </dl>
 </section>
 
