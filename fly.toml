@@ -1,6 +1,6 @@
 # Configuración de Fly.io. El nombre de la app se elige al crearla (fly apps create).
 app = "katiu-yoga"
-primary_region = "mad"  # Madrid: los datos se quedan en la UE
+primary_region = "cdg"  # París: Fly ya no ofrece Madrid; es la región UE más cercana
 
 [build]
 

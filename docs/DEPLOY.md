@@ -1,11 +1,11 @@
 # Despliegue (piloto en Fly.io)
 
-La app vive en **Fly.io, región Madrid** (`mad`). SQLite está en un disco persistente y
+La app vive en **Fly.io, región París** (`cdg`, la UE más cercana: Fly ya no ofrece Madrid). SQLite está en un disco persistente y
 **Litestream** copia cada cambio a **Cloudflare R2** (jurisdicción UE). Por qué así: ver
 [ADR-0006](adr/0006-despliegue-fly-litestream.md).
 
 ```
-móvil de Kat ──HTTPS──▶ Fly.io (Madrid) ── uvicorn + FastAPI
+móvil de Kat ──HTTPS──▶ Fly.io (París) ─── uvicorn + FastAPI
                                 │
                                 ├── /data/katiu.db  (disco de 1 GB)
                                 └── Litestream ──▶ R2 (copia continua, 30 días)
@@ -34,7 +34,7 @@ Desde la carpeta del repo:
 
 ```bash
 fly apps create katiu-yoga          # si el nombre está cogido, elige otro y cámbialo en fly.toml
-fly volumes create katiu_data --region mad --size 1 --app katiu-yoga   # responde "y" al aviso
+fly volumes create katiu_data --region cdg --size 1 --app katiu-yoga   # responde "y" al aviso
 fly secrets set --app katiu-yoga \
   KATIU_SECRET_KEY="$(openssl rand -hex 32)" \
   LITESTREAM_BUCKET=katiu-backups \
