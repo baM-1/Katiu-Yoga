@@ -1,20 +1,40 @@
+{% from "partials/icons.html" import icon with context %}
 <!doctype html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#F4EFE6" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#1F2722" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#FBF7EF" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0E2230" media="(prefers-color-scheme: dark)">
+  <meta name="htmx-config" content='{"includeIndicatorStyles": false, "defaultSwapStyle": "outerHTML"}'>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Katiu Yoga">
   <title>{% block title %}Katiu Yoga{% endblock %}</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="{{ url_for('static', path='icons/icon-192.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', path='icons/apple-touch-icon.png') }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..600&display=swap">
   <link rel="stylesheet" href="{{ url_for('static', path='css/tokens.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', path='css/base.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='css/components.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='css/utilities.css') }}">
+  <script src="{{ url_for('static', path='js/htmx.min.js') }}" defer></script>
+  <script src="{{ url_for('static', path='js/app.js') }}" defer></script>
 </head>
-<body>
-  <main class="page">
+<body hx-headers='{"X-CSRF-Token": "{{ csrf(request) }}"}'>
+  <main class="page{% block page_class %}{% endblock %}" id="main">
     {% block content %}{% endblock %}
   </main>
+  {% block nav %}
+  {% set section = section | default("") %}
+  <nav class="tabbar" aria-label="Navegación principal">
+    <a href="/" {% if section == "hoy" %}aria-current="page"{% endif %}>{{ icon("sun") }}Hoy</a>
+    <a href="/alumnos" {% if section == "alumnos" %}aria-current="page"{% endif %}>{{ icon("users") }}Alumnos</a>
+    <a href="/dinero" {% if section == "dinero" %}aria-current="page"{% endif %}>{{ icon("wallet") }}Dinero</a>
+    <a href="/mas" {% if section == "mas" %}aria-current="page"{% endif %}>{{ icon("more") }}Más</a>
+  </nav>
+  {% endblock %}
 </body>
 </html>
