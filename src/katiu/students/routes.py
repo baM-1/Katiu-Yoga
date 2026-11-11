@@ -6,10 +6,13 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, RedirectResponse, Response
 
+from katiu.audit import service as audit
+from katiu.audit.models import AuditAction, AuditTarget
 from katiu.core.security import verify_csrf
 from katiu.core.templating import templates
 from katiu.core.web import CurrentUser, DbSession, is_htmx
 from katiu.students import service
+from katiu.students.models import Student
 
 router = APIRouter(prefix="/alumnos")
 write = APIRouter(prefix="/alumnos", dependencies=[Depends(verify_csrf)])
@@ -62,6 +65,7 @@ def create(
             },
             status_code=422,
         )
+    audit.record(db, user.id, AuditAction.STUDENT_CREATED, AuditTarget.STUDENT, student.id)
     return RedirectResponse(f"/alumnos/{student.id}", status_code=303)
 
 
@@ -124,7 +128,9 @@ def update(
             active=bool(active),
             whatsapp_consent=bool(whatsapp_consent),
         )
-        service.update_student(db, student_id, changes)
+        before = db.get(Student, student_id)
+        old_health = before.health_notes if before else None
+        saved = service.update_student(db, student_id, changes)
     except service.StudentError as exc:
         db.rollback()
         try:
@@ -149,5 +155,8 @@ def update(
         except service.StudentError as missing:
             raise HTTPException(404, str(missing)) from missing
         return templates.TemplateResponse(request, "student_edit.html", context, status_code=422)
+    # Solo apuntamos QUE cambió la salud, nunca qué pone.
+    detail = "cambió salud" if saved.health_notes != old_health else None
+    audit.record(db, user.id, AuditAction.STUDENT_UPDATED, AuditTarget.STUDENT, student_id, detail)
     # PRG: tras guardar, redirigimos a la ficha (recargar no reenvía el formulario).
     return RedirectResponse(f"/alumnos/{student_id}?guardado=1", status_code=303)

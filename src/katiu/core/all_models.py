@@ -5,6 +5,7 @@ Alembic y los tests importan este módulo: si un modelo no aparece aquí, no exi
 
 from katiu.accounts.models import User
 from katiu.attendance.models import Attendance
+from katiu.audit.models import AuditEvent
 from katiu.classes.models import ClassSession, Plan, ScheduleSlot
 from katiu.payments.models import PackPurchase, Payment
 from katiu.reminders.models import ReminderLog
@@ -12,6 +13,7 @@ from katiu.students.models import Student
 
 __all__ = [
     "Attendance",
+    "AuditEvent",
     "ClassSession",
     "PackPurchase",
     "Payment",

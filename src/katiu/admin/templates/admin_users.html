@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Usuarios · Katiu Yoga{% endblock %}
+{% block content %}
+<a href="/admin" class="back" aria-label="Volver al Panel de Admin">{{ icon("back") }}</a>
+<header class="page-head"><div><p class="eyebrow">Admin</p><h1>Usuarios</h1></div></header>
+{% if message %}<p class="notice" role="status">{{ message }}</p>{% endif %}
+{% if error %}<p class="notice notice--error" role="alert">{{ error }}</p>{% endif %}
+
+<ul class="stack mt-4" role="list">
+{% for u in users %}
+  <li class="card user-card{% if not u.active %} user-card--off{% endif %}">
+    <div class="spread">
+      <div>
+        <b>{{ u.display_name }}</b>
+        <p class="muted user-card__email">{{ u.email }}</p>
+      </div>
+      <div class="row">
+        {% if u.is_admin %}<span class="pill">{{ icon("shield") }} Admin</span>{% endif %}
+        {% if not u.active %}<span class="pill pill--danger">Desactivado</span>{% endif %}
+      </div>
+    </div>
+    {% set last = last_logins.get(u.id) %}
+    <p class="muted">{% if last %}Última entrada: {{ last.astimezone(tz).strftime("%d/%m/%Y %H:%M") }}{% else %}Aún no ha entrado{% endif %}</p>
+    <details class="disclosure mt-2">
+      <summary>{{ icon("lock") }} Poner contraseña nueva</summary>
+      <form class="disclosure__body" method="post" action="/admin/usuarios/{{ u.id }}/contrasena">
+        <input type="hidden" name="csrf_token" value="{{ csrf(request) }}">
+        <div class="field"><label for="pw-{{ u.id }}">Contraseña nueva</label>
+          <input class="input" id="pw-{{ u.id }}" name="password" type="password" autocomplete="new-password" minlength="8" required>
+          <small>Mínimo 8 caracteres. Las contraseñas se guardan cifradas: nadie puede verlas, solo cambiarlas.</small></div>
+        <button class="btn" type="submit">Guardar contraseña</button>
+      </form>
+    </details>
+    {% if u.id != me.id %}
+    <form method="post" action="/admin/usuarios/{{ u.id }}/activo" class="mt-2">
+      <input type="hidden" name="csrf_token" value="{{ csrf(request) }}">
+      {% if u.active %}<button class="btn btn--ghost btn--block" type="submit">{{ icon("pause") }} Desactivar (ya no podrá entrar)</button>
+      {% else %}<input type="hidden" name="active" value="1"><button class="btn btn--ghost btn--block" type="submit">{{ icon("check") }} Activar de nuevo</button>{% endif %}
+    </form>
+    {% endif %}
+  </li>
+{% endfor %}
+</ul>
+
+<details class="disclosure mt-4"{% if error and form %} open{% endif %}>
+  <summary>{{ icon("plus") }} Usuario nuevo</summary>
+  <form class="disclosure__body" method="post" action="/admin/usuarios">
+    <input type="hidden" name="csrf_token" value="{{ csrf(request) }}">
+    <div class="field"><label for="new-name">Nombre</label>
+      <input class="input" id="new-name" name="display_name" required maxlength="60" value="{{ form.display_name or '' }}"></div>
+    <div class="field"><label for="new-email">Email</label>
+      <input class="input" id="new-email" name="email" type="email" required autocomplete="off" value="{{ form.email or '' }}"></div>
+    <div class="field"><label for="new-pw">Contraseña inicial</label>
+      <input class="input" id="new-pw" name="password" type="password" autocomplete="new-password" minlength="8" required>
+      <small>Que la cambie desde Más → Contraseña al entrar.</small></div>
+    <label class="check"><input type="checkbox" name="is_admin" value="1"{% if form.is_admin %} checked{% endif %}> Es administrador (ve este panel)</label>
+    <button class="btn" type="submit">Crear usuario</button>
+  </form>
+</details>
+{% endblock %}

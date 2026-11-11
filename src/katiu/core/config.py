@@ -22,6 +22,8 @@ class Settings(BaseSettings):
     session_days: int = 30
     login_max_attempts: int = 5
     login_window_minutes: int = 15
+    # Métricas de Litestream (estado de la copia en el Panel de Admin). Vacío = sin copia.
+    litestream_metrics_url: str | None = None
 
     @property
     def is_dev(self) -> bool:

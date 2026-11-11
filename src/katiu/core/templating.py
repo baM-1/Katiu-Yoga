@@ -10,6 +10,7 @@ from pathlib import Path
 from fastapi.templating import Jinja2Templates
 from jinja2 import ChoiceLoader, FileSystemLoader
 
+from katiu.core import clock
 from katiu.core.config import get_settings
 from katiu.core.money import format_eur
 from katiu.core.security import csrf_token
@@ -17,7 +18,16 @@ from katiu.core.text import initials, whatsapp_url
 
 PKG = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = PKG / "templates"
-MODULES = ["accounts", "classes", "attendance", "students", "payments", "dashboard", "settings"]
+MODULES = [
+    "accounts",
+    "classes",
+    "attendance",
+    "students",
+    "payments",
+    "dashboard",
+    "settings",
+    "admin",
+]
 
 MONTHS = [
     "enero", "febrero", "marzo", "abril", "mayo", "junio",
@@ -49,3 +59,4 @@ templates.env.globals["is_dev"] = get_settings().is_dev
 templates.env.globals["csrf"] = csrf_token
 templates.env.globals["initials"] = initials
 templates.env.globals["whatsapp_url"] = whatsapp_url
+templates.env.globals["tz"] = clock.tz()

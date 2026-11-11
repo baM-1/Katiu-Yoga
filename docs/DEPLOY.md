@@ -92,10 +92,25 @@ Desde entonces, cada merge a `main` con la CI en verde se despliega solo
 - **Bajarte una copia al Mac** (en local, con Litestream instalado y las mismas variables):
   `litestream restore -config deploy/litestream.yml -o backups/katiu.db /data/katiu.db`
 
+## Panel de Admin
+
+Una vez, para darte acceso (te pide contraseña si el usuario aún no existe):
+
+```sh
+fly ssh console --pty --app katiu-yoga -u katiu \
+  -C "sh -c 'cd /app && python scripts/make_admin.py --email TU_EMAIL --nombre Lalo'"
+```
+
+Después entra en la app con ese email y ve a **Más → Panel de Admin**. Desde ahí se crean
+usuarios, se ponen contraseñas nuevas, se ve la actividad y el estado de la copia, y se
+descarga todo en Excel. El semáforo de la copia lee las métricas de Litestream
+(`127.0.0.1:9090`, solo dentro de la máquina).
+
 ## Si algo va mal
 
 | Síntoma | Qué mirar |
 |---|---|
 | La app no arranca | `fly logs --app katiu-yoga` |
 | "LITESTREAM_BUCKET no definido" en los logs | Faltan los secretos del paso 2 |
+| El panel dice "Litestream no responde" | `fly logs`: busca errores de Litestream; reinicia con `fly machine restart` |
 | Se cerró la sesión de Kat tras un despliegue | Se cambió `KATIU_SECRET_KEY`; no cambiarla salvo filtración |

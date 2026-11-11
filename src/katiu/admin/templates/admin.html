@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Admin · Katiu Yoga{% endblock %}
+{% block content %}
+<a href="/mas" class="back" aria-label="Volver a Más">{{ icon("back") }}</a>
+<header class="page-head"><div><p class="eyebrow">Sala de máquinas</p><h1>Panel de Admin</h1></div></header>
+
+{% set tone = {"ok": "ok", "syncing": "warn", "error": "danger", "off": "warn"}[backup.state.value] %}
+<section class="card mt-4 status status--{{ tone }}" aria-labelledby="backup-title">
+  <div class="spread">
+    <h2 id="backup-title" class="row">{{ icon("cloud") }} Copia de seguridad</h2>
+    <span class="pill pill--{{ tone }}">{{ {"ok": "Al día", "syncing": "Copiando", "error": "Revisar", "off": "Apagada"}[backup.state.value] }}</span>
+  </div>
+  <p class="mt-2">{{ backup.message }}</p>
+  {% if backup.db_bytes %}<p class="muted">Base de datos: {{ "%.1f"|format(backup.db_bytes / 1024) }} KB{% if backup.pending_bytes %} · pendiente {{ "%.1f"|format(backup.pending_bytes / 1024) }} KB{% endif %}</p>{% endif %}
+</section>
+
+<section class="stats mt-4" aria-label="Cifras">
+  <div class="stat"><b>{{ totals.students_active }}</b><span>alumnos</span></div>
+  <div class="stat"><b>{{ totals.classes }}</b><span>clases</span></div>
+  <div class="stat"><b>{{ totals.attendances }}</b><span>asistencias</span></div>
+</section>
+
+<ul class="list mt-4" role="list">
+  <li><a class="list-row" href="/admin/usuarios">{{ icon("users") }}<span class="list-row__main"><b>Usuarios</b><span>{{ users | selectattr("active") | list | length }} activos · altas y contraseñas</span></span>{{ icon("chevron") }}</a></li>
+  <li><a class="list-row" href="/admin/actividad">{{ icon("activity") }}<span class="list-row__main"><b>Actividad</b><span>{% if failed_24h %}{{ failed_24h }} intento{{ "s" if failed_24h != 1 }} fallido{{ "s" if failed_24h != 1 }} en 24 h{% else %}Quién hizo qué y cuándo{% endif %}</span></span>{{ icon("chevron") }}</a></li>
+  <li><a class="list-row" href="/admin/exportar">{{ icon("download") }}<span class="list-row__main"><b>Exportar a Excel</b><span>Todos los datos en un archivo</span></span>{{ icon("chevron") }}</a></li>
+</ul>
+
+{% if events %}
+<section class="section">
+  <h2>Lo último</h2>
+  {% include "_admin_events.html" %}
+</section>
+{% endif %}
+{% endblock %}

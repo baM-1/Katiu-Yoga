@@ -13,4 +13,6 @@ class User(SQLModel, table=True):
     display_name: str = Field(max_length=60)
     password_hash: str
     active: bool = True
+    # Acceso al Panel de Admin (/admin). Kat no lo necesita; Lalo sí.
+    is_admin: bool = False
     created_at: datetime = Field(default_factory=utcnow)

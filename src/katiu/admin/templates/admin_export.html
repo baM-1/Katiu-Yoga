@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Exportar · Katiu Yoga{% endblock %}
+{% block content %}
+<a href="/admin" class="back" aria-label="Volver al Panel de Admin">{{ icon("back") }}</a>
+<header class="page-head"><div><p class="eyebrow">Admin</p><h1>Exportar a Excel</h1></div></header>
+<p>Descarga todo en un archivo .xlsx: {{ totals.students_total }} alumnos, {{ totals.classes }} clases, {{ totals.attendances }} asistencias, pagos, bonos, tarifas y horario. Es tu red de seguridad: con él puedes salir de la app cuando quieras.</p>
+<form class="stack mt-4" method="post" action="/admin/exportar">
+  <input type="hidden" name="csrf_token" value="{{ csrf(request) }}">
+  <label class="check"><input type="checkbox" name="salud" value="1"> Incluir notas de salud</label>
+  <p class="notice notice--error" role="note">Las notas de salud son datos sensibles. Inclúyelas solo si de verdad las necesitas, guarda el archivo en un sitio seguro y bórralo cuando acabes. No lo mandes por WhatsApp ni por email.</p>
+  <button class="btn btn--block" type="submit">{{ icon("download") }} Descargar Excel</button>
+</form>
+{% endblock %}

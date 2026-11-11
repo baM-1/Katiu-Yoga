@@ -2,7 +2,7 @@
 
 from typing import Annotated
 
-from fastapi import Depends, Request
+from fastapi import Depends, HTTPException, Request
 from sqlmodel import Session
 
 from katiu.accounts.models import User
@@ -30,3 +30,13 @@ CurrentUser = Annotated[User, Depends(current_user)]
 
 def is_htmx(request: Request) -> bool:
     return request.headers.get("HX-Request") == "true"
+
+
+def admin_user(user: CurrentUser) -> User:
+    """Solo administradores. A los demás les respondemos 404 (ni siquiera saben que existe)."""
+    if not user.is_admin:
+        raise HTTPException(404)
+    return user
+
+
+AdminUser = Annotated[User, Depends(admin_user)]

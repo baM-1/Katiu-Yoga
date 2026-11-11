@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Actividad · Katiu Yoga{% endblock %}
+{% block content %}
+<a href="/admin" class="back" aria-label="Volver al Panel de Admin">{{ icon("back") }}</a>
+<header class="page-head"><div><p class="eyebrow">Admin</p><h1>Actividad</h1></div></header>
+<p class="muted">Los últimos {{ events | length }} movimientos. Solo se apunta qué pasó, nunca datos de salud.</p>
+<div class="mt-4">
+{% if events %}{% include "_admin_events.html" %}
+{% else %}<p class="empty">Aún no hay movimientos. Todo en calma, como un savasana.</p>{% endif %}
+</div>
+{% endblock %}

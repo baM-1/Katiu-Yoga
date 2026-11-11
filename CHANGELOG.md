@@ -6,6 +6,18 @@ Versionado: [SemVer](https://semver.org/lang/es/).
 
 ## [Sin publicar]
 
+### Añadido (Panel de Admin)
+- **Panel de Admin** en `/admin`, solo para usuarios con `is_admin` (los demás ven un 404).
+  Se llega desde Más → Panel de Admin. ADR-0007.
+- **Usuarios:** alta, contraseña nueva, activar/desactivar. Nadie puede desactivarse a sí mismo
+  y siempre queda un admin activo.
+- **Registro de actividad** (`audit_events`, solo añadir): entradas y fallos, fichas, asistencia,
+  cobros, horario, usuarios y exportaciones. Sin datos personales ni de salud.
+- **Estado de la copia de seguridad** leyendo las métricas de Litestream (`127.0.0.1:9090`).
+- **Exportar a Excel** (alumnos, clases, asistencias, pagos, bonos, tarifas, horario). Las notas
+  de salud solo si se marcan.
+- `scripts/make_admin.py` para dar acceso de admin desde la terminal del servidor.
+
 ### Añadido (primeras observaciones de Kat)
 - **Editar ficha de alumno**: nombre, teléfono, email, fechas, ubicación, tarifa habitual,
   salud, notas, activo/inactivo y consentimiento de WhatsApp (guarda la fecha; se borra al
