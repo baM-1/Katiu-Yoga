@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% set s = p.student %}
+{% block title %}{{ s.full_name }} · Katiu Yoga{% endblock %}
+{% block content %}
+<a href="/alumnos" class="back" aria-label="Volver a Alumnos">{{ icon("back") }}</a>
+<header class="profile-head">
+  <span class="avatar" aria-hidden="true">{{ initials(s.full_name) }}</span>
+  <div>
+    <h1>{{ s.full_name }}</h1>
+    <p class="muted">{% if s.active %}Activo{% else %}Inactivo{% endif %}{% if p.plan %} · {{ p.plan.name }}{% endif %}</p>
+  </div>
+</header>
+
+<div class="actions mt-4">
+  {% set wa = whatsapp_url(s.phone_e164) %}
+  {% if wa %}<a class="btn" href="{{ wa }}" target="_blank" rel="noopener">{{ icon("message") }} WhatsApp</a>
+  {% else %}<span class="btn btn--ghost" aria-disabled="true">Sin teléfono</span>{% endif %}
+  <a class="btn btn--ghost" href="/">{{ icon("sun") }} Pasar lista</a>
+</div>
+
+<section class="card mt-6">
+  <div class="spread">
+    <div>
+      <p class="eyebrow">Saldo</p>
+      {% if p.balance_cents > 0 %}
+        <p class="balance balance--debt">Debe {{ eur(p.balance_cents) }}</p>
+      {% elif p.balance_cents < 0 %}
+        <p class="balance balance--ok">A favor {{ eur(-p.balance_cents) }}</p>
+      {% else %}
+        <p class="balance balance--ok">Al día ✓</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Datos</h2>
+  <dl class="kv card">
+    <dt>Teléfono</dt><dd>{{ s.phone_e164 or "—" }}</dd>
+    <dt>Email</dt><dd>{{ s.email or "—" }}</dd>
+    <dt>Con Kat desde</dt><dd>{% if s.started_on %}{{ human_date(s.started_on, weekday=false) }} de {{ s.started_on.year }}{% else %}—{% endif %}</dd>
+    <dt>Cumpleaños</dt><dd>{% if s.birthday %}{{ human_date(s.birthday, weekday=false) }}{% else %}—{% endif %}</dd>
+    <dt>Ubicación</dt><dd>{{ s.location or "—" }}</dd>
+  </dl>
+</section>
+
+{% if s.health_notes %}
+<section class="section">
+  <h2>Salud</h2>
+  <p class="card sensitive">{{ s.health_notes }}</p>
+  <p class="muted mt-2 row">{{ icon("lock") }} Dato sensible: solo se muestra aquí.</p>
+</section>
+{% endif %}
+
+{% if s.notes %}
+<section class="section">
+  <h2>Notas</h2>
+  <p class="card">{{ s.notes }}</p>
+</section>
+{% endif %}
+
+<section class="section">
+  <h2>Últimas clases</h2>
+  {% if p.history %}
+  <ul class="list" role="list">
+    {% for row in p.history %}
+    <li><a class="list-row" href="/clases/{{ row.session.id }}">
+      <span class="list-row__main"><b>{{ human_date(row.session.date) | capitalize }}</b>
+      <span>{{ row.session.start_time.strftime("%H:%M") }} · {{ eur(row.attendance.price_cents, decimals=false) }}</span></span>
+      {{ icon("chevron") }}
+    </a></li>
+    {% endfor %}
+  </ul>
+  {% else %}<p class="muted">Todavía no ha venido a ninguna clase.</p>{% endif %}
+</section>
+{% endblock %}

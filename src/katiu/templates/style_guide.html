@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Sistema de diseño · Katiu Yoga{% endblock %}
+{% block content %}
+<header class="page-head"><div><p class="eyebrow">Solo desarrollo</p><h1>Marea turquesa</h1></div><span class="logo" role="img" aria-label="Katiu Yoga"></span></header>
+<p class="lede">El catálogo vivo de componentes. Si no está aquí, no existe.</p>
+{% include "partials/wave.html" %}
+
+<section class="section"><h2>Color</h2>
+  <div class="swatches mt-4">
+    {% for name in ["oceano","oceano-profundo","arena","espuma","turquesa","turquesa-tinta","coral","coral-tinta","sol","alga","miel","granada","muted","linea"] %}
+    <div class="swatch sg-{{ name }}"><b>{{ name }}</b>var(--{{ name }})</div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section"><h2>Tipografía</h2>
+  <h1>Newsreader 600 · Titular</h1>
+  <p class="lede mt-2">Newsreader itálica · ¡Clase lista! 6 personas hoy 🌊</p>
+  <p class="mt-2">Inter 400 · Texto de interfaz, legible al sol y con el pulgar.</p>
+  <p class="eyebrow mt-2">Eyebrow · etiqueta superior</p>
+</section>
+
+<section class="section"><h2>Botones y pills</h2>
+  <div class="row"><button class="btn">{{ icon("check") }} Primario</button><button class="btn btn--ghost">Secundario</button><button class="btn btn--danger">Deshacer</button></div>
+  <div class="row mt-4"><span class="pill pill--ok">{{ icon("check") }} Asistió</span><span class="pill pill--warn">Pendiente 30 €</span><span class="pill pill--danger">Deshacer</span><span class="pill">Neutro</span></div>
+</section>
+
+<section class="section"><h2>Tarjeta de clase</h2>
+  <div class="stack">
+    <a class="card class-card class-card--today" href="#"><span class="class-card__time">09:00</span><span><span class="class-card__title">Grupal presencial</span><br><span class="class-card__meta">6 personas</span></span><span class="class-card__go">{{ icon("chevron") }}</span></a>
+    <a class="card class-card" href="#"><span class="class-card__time">10:15</span><span><span class="class-card__title">Grupal presencial</span><br><span class="class-card__meta">Pasar lista</span></span><span class="class-card__go">{{ icon("chevron") }}</span></a>
+  </div>
+</section>
+
+<section class="section"><h2>Pasar lista</h2>
+  <ul class="roster" role="list">
+    <li class="roster-item is-on is-paid"><button class="roster-item__toggle" type="button"><span class="avatar">{{ icon("check") }}</span><span><span class="roster-item__name">Paula Ejemplo</span><span class="roster-item__hint">Vino · 30 €</span></span></button><button class="roster-item__pay" type="button">✓ Pagado</button></li>
+    <li class="roster-item is-on"><button class="roster-item__toggle" type="button"><span class="avatar">{{ icon("check") }}</span><span><span class="roster-item__name">Lucía Demo</span><span class="roster-item__hint">Vino · 30 €</span></span></button><button class="roster-item__pay" type="button">€ Pendiente</button></li>
+    <li class="roster-item"><button class="roster-item__toggle" type="button"><span class="avatar">MR</span><span><span class="roster-item__name">Marta Ficticia</span><span class="roster-item__hint">Habitual de esta hora</span></span></button></li>
+  </ul>
+  <div class="totals"><span>2 personas</span><span>Cobrado <b>30 €</b></span><span>Pendiente <b>30 €</b></span></div>
+</section>
+
+<section class="section"><h2>Formulario</h2>
+  <div class="stack card">
+    <div class="field"><label for="sg-a">Nombre</label><input class="input" id="sg-a" placeholder="Nombre y apellido"></div>
+    <div class="search">{{ icon("search") }}<label for="sg-b" class="visually-hidden">Buscar</label><input class="input" id="sg-b" type="search" placeholder="Buscar…"></div>
+    <p class="notice">¡Horario guardado! 🌊</p>
+    <p class="notice notice--error">Ese teléfono no parece válido.</p>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Pasar lista · Katiu Yoga{% endblock %}
+{% block content %}
+<header class="page-head">
+  <div>
+    <a href="/" class="back" aria-label="Volver a Hoy">{{ icon("back") }}</a>
+    <p class="eyebrow">{{ human_date(cls.date) }}</p>
+    <h1>{{ cls.start_time.strftime("%H:%M") }} · {{ plan.name.split(" · ")[0] }}</h1>
+  </div>
+</header>
+
+<div class="search mt-2">
+  {{ icon("search") }}
+  <label for="buscar" class="visually-hidden">Buscar alumno</label>
+  <input class="input" id="buscar" type="search" placeholder="Buscar…" autocomplete="off"
+         data-filter=".roster-item">
+</div>
+
+<section class="section" aria-labelledby="h-habituales">
+  <h2 id="h-habituales">{{ "En clase y habituales" if regulars else "Lista" }}</h2>
+  <ul class="roster" id="roster-attended" role="list">
+    {% for item in regulars %}{% with cls_id=cls.id %}{% include "_roster_item.html" %}{% endwith %}{% endfor %}
+  </ul>
+</section>
+
+<details class="disclosure mt-4">
+  <summary>{{ icon("plus") }} Alumno nuevo</summary>
+  <form class="disclosure__body" hx-post="/clases/{{ cls.id }}/alumnos" data-reset-on-success>
+    <div class="field">
+      <label for="nuevo-nombre">Nombre</label>
+      <input class="input" id="nuevo-nombre" name="full_name" required autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="nuevo-telefono">Teléfono <small>(opcional)</small></label>
+      <input class="input" id="nuevo-telefono" name="phone" type="tel" inputmode="tel" placeholder="+34 600 000 000">
+    </div>
+    <p id="quick-add-error" class="muted"></p>
+    <button class="btn" type="submit">Añadir y marcar</button>
+  </form>
+</details>
+
+{% if others %}
+<section class="section" aria-labelledby="h-todos">
+  <h2 id="h-todos">Todos</h2>
+  <ul class="roster" role="list">
+    {% for item in others %}{% with cls_id=cls.id %}{% include "_roster_item.html" %}{% endwith %}{% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+{% with oob=false %}{% include "_totals.html" %}{% endwith %}
+{% endblock %}

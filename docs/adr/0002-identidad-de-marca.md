@@ -1,6 +1,6 @@
 # ADR-0002: Identidad visual de Katiu Yoga en lugar de "Boho Surf"
 
-- **Estado:** aceptada
+- **Estado:** aceptada (paleta revisada dos veces; vigente: "Marea turquesa")
 - **Fecha:** 2026-11-11
 - **Sustituye a:** la sección 6 ("Boho Surf") del prompt maestro
 
@@ -47,3 +47,15 @@ herramienta interna, pero Kat la abrirá a diario y debe sentirse suya.
 - ✅ Hay dos capas de tokens (marca → roles). El modo oscuro solo reasigna roles.
 - ⚠️ El logo es un raster de 560 px. Conviene pedir el SVG original.
 - ⚠️ Newsreader es una aproximación a Abril Text, no la tipografía oficial.
+
+## Revisión 2: "Marea turquesa" (vigente)
+Lalo revisó "Bosque & Lino" y le pareció "otoñal y serio, como una tienda de hogar". Pidió un
+aire más surfero. Se mostraron dos direcciones en un móvil, "A · Atardecer en Ericeira" y
+"B · Marea turquesa", y **eligió la B**.
+
+- Se mantienen de la marca el **logo** (pasa a azul océano), la **estrella**, la tipografía
+  serif y el **coral**, que hereda la terracota.
+- Paleta nueva: océano `#14384A`, arena `#FBF7EF`, turquesa `#16A3A8` / tinta `#0F7480`,
+  coral `#FF8A66`, sol `#FFC547`, alga `#2E7D5B`, miel `#8A5D00` y granada `#B23A2E`. Todos los
+  textos ≥ 4,5:1. El detalle está en `docs/DESIGN_SYSTEM.md`.
+- Modo oscuro "mar de noche" (`#0E2230`).

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Entrar · Katiu Yoga{% endblock %}
+{% block page_class %} page--bare{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+<section class="login">
+  <span class="logo login__logo" role="img" aria-label="Katiu Yoga"></span>
+  <p class="lede mt-4">Tu práctica. Tu ritmo. Tu espacio.</p>
+  {% include "partials/wave.html" %}
+  <form method="post" action="/entrar" class="stack mt-4">
+    <input type="hidden" name="csrf_token" value="{{ csrf(request) }}">
+    {% if error %}<p class="notice notice--error" role="alert">{{ error }}</p>{% endif %}
+    <div class="field">
+      <label for="email">Email</label>
+      <input class="input" id="email" name="email" type="email" autocomplete="username" required value="{{ email | default('') }}">
+    </div>
+    <div class="field">
+      <label for="password">Contraseña</label>
+      <input class="input" id="password" name="password" type="password" autocomplete="current-password" required>
+    </div>
+    <button class="btn btn--block mt-4" type="submit">Entrar</button>
+  </form>
+</section>
+{% endblock %}

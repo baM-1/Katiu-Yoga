@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Alumnos · Katiu Yoga{% endblock %}
+{% block content %}
+<header class="page-head">
+  <div>
+    <p class="eyebrow">Tu comunidad</p>
+    <h1>Alumnos</h1>
+  </div>
+</header>
+
+<div class="search">
+  {{ icon("search") }}
+  <label for="q" class="visually-hidden">Buscar alumno</label>
+  <input class="input" id="q" name="q" type="search" placeholder="Buscar por nombre…" value="{{ q }}"
+         autocomplete="off" hx-get="/alumnos" hx-trigger="input changed delay:200ms, search"
+         hx-target="#student-list" hx-swap="outerHTML" hx-include="#todos">
+</div>
+<div class="spread mt-2">
+  <label class="row muted"><input type="checkbox" id="todos" name="todos" value="true" {% if todos %}checked{% endif %}
+    hx-get="/alumnos" hx-trigger="change" hx-target="#student-list" hx-swap="outerHTML" hx-include="#q"> Ver también inactivos</label>
+  <span class="muted">{{ students | length }}</span>
+</div>
+
+<div class="mt-4">{% include "_student_list.html" %}</div>
+
+<details class="disclosure mt-4"{% if error %} open{% endif %}>
+  <summary>{{ icon("plus") }} Alumno nuevo</summary>
+  <form class="disclosure__body" method="post" action="/alumnos">
+    <input type="hidden" name="csrf_token" value="{{ csrf(request) }}">
+    {% if error %}<p class="notice notice--error" role="alert">{{ error }}</p>{% endif %}
+    <div class="field">
+      <label for="alta-nombre">Nombre</label>
+      <input class="input" id="alta-nombre" name="full_name" required value="{{ form.full_name if form else '' }}">
+    </div>
+    <div class="field">
+      <label for="alta-telefono">Teléfono <small>(opcional)</small></label>
+      <input class="input" id="alta-telefono" name="phone" type="tel" inputmode="tel" placeholder="+34 600 000 000" value="{{ form.phone if form else '' }}">
+    </div>
+    <button class="btn" type="submit">Crear ficha</button>
+  </form>
+</details>
+{% endblock %}

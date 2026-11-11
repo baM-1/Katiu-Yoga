@@ -1,0 +1,29 @@
+{# Una persona en la lista. Variables: item (RosterItem), cls_id #}
+{% set s = item.student %}
+<li class="roster-item{% if item.attended %} is-on{% endif %}{% if item.paid %} is-paid{% endif %}"
+    id="alumno-{{ s.id }}" data-name="{{ s.full_name }}">
+  <button class="roster-item__toggle" type="button"
+          hx-post="/clases/{{ cls_id }}/alumnos/{{ s.id }}/asistencia"
+          hx-target="#alumno-{{ s.id }}" hx-swap="outerHTML"
+          {% if item.paid %}hx-confirm="{{ s.full_name }} ya pagó esta clase. ¿Quitarla de la lista y borrar el pago?"{% endif %}
+          aria-pressed="{{ 'true' if item.attended else 'false' }}">
+    <span class="avatar" aria-hidden="true">{% if item.attended %}{{ icon("check") }}{% else %}{{ initials(s.full_name) }}{% endif %}</span>
+    <span>
+      <span class="roster-item__name">{{ s.full_name }}</span>
+      <span class="roster-item__hint">
+        {%- if item.attended %}Vino · {{ eur(item.attendance.price_cents, decimals=false) }}
+        {%- elif item.is_regular %}Habitual de esta hora
+        {%- else %}Toca para marcar{% endif -%}
+      </span>
+    </span>
+  </button>
+  {% if item.attended %}
+  <button class="roster-item__pay" type="button"
+          hx-post="/clases/{{ cls_id }}/alumnos/{{ s.id }}/pago"
+          hx-target="#alumno-{{ s.id }}" hx-swap="outerHTML"
+          aria-pressed="{{ 'true' if item.paid else 'false' }}"
+          aria-label="{{ 'Pagado. Toca para marcar como pendiente' if item.paid else 'Pendiente. Toca para marcar como pagado en efectivo' }}">
+    {% if item.paid %}✓ Pagado{% else %}€ Pendiente{% endif %}
+  </button>
+  {% endif %}
+</li>

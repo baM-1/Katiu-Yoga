@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="page-head"><div><p class="eyebrow">{{ user.display_name }}</p><h1>Más</h1></div></header>
+<ul class="list" role="list">
+  <li><a class="list-row" href="/ajustes/horario">{{ icon("calendar") }}<span class="list-row__main"><b>Horario y clases extra</b><span>Tus clases fijas de cada semana</span></span>{{ icon("chevron") }}</a></li>
+  <li><a class="list-row" href="/ajustes/contrasena">{{ icon("lock") }}<span class="list-row__main"><b>Contraseña</b><span>Cambiar la contraseña de acceso</span></span>{{ icon("chevron") }}</a></li>
+  {% if is_dev %}<li><a class="list-row" href="/_estilo">{{ icon("star") }}<span class="list-row__main"><b>Sistema de diseño</b><span>Solo en desarrollo</span></span>{{ icon("chevron") }}</a></li>{% endif %}
+</ul>
+<form method="post" action="/salir" class="mt-6">
+  <input type="hidden" name="csrf_token" value="{{ csrf(request) }}">
+  <button class="btn btn--ghost btn--block" type="submit">{{ icon("logout") }} Salir</button>
+</form>
+{% endblock %}

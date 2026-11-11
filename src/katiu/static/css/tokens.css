@@ -1,75 +1,97 @@
-/* Tokens de marca Katiu Yoga: paleta "Bosque & Lino" (refresh 2026-11, ADR-0002).
-   Única fuente de color, tipografía y forma. Hay dos capas:
-   1) colores de marca (--bosque, --terracota...) y
-   2) roles semánticos (--text, --accent, --ok...), que es lo ÚNICO que usan los componentes.
-   Todos los pares texto/fondo cumplen WCAG AA (≥ 4.5:1); los ratios están anotados. */
+/* Tokens Katiu Yoga · paleta "Marea turquesa" (elegida por Lalo, 2026-11-11; ver ADR-0002).
+   Dos capas: 1) colores de marca, 2) roles semánticos. Los componentes SOLO usan roles.
+   Todos los textos cumplen WCAG AA (≥ 4.5:1); los ratios van anotados. */
 :root {
   /* --- Marca --- */
-  --bosque: #34433A;          /* texto y navegación · 9.1:1 sobre lino */
-  --bosque-profundo: #26322B; /* titulares, barra inferior */
-  --lino: #F4EFE6;            /* fondo */
-  --papel: #FBF9F5;           /* tarjetas */
-  --terracota: #C8602E;       /* estrella, iconos, acentos grandes (no texto pequeño) */
-  --terracota-tinta: #A2461C; /* botón primario y enlaces · 5.4:1 */
-  --salvia: #5D6A50;          /* texto secundario, "asistió" · 5.0:1 */
-  --arena: #CDB896;           /* bordes y separadores (decorativo) */
-  --miel: #8A5F0C;            /* "pendiente de pago" · 4.9:1 */
-  --granada: #9E3B2E;         /* errores, deshacer · 5.9:1 */
+  --oceano: #14384A;           /* texto · 11.6:1 sobre arena */
+  --oceano-profundo: #0C2734;  /* titulares, barra de totales */
+  --arena: #FBF7EF;            /* fondo */
+  --espuma: #FFFFFF;           /* tarjetas */
+  --turquesa: #16A3A8;         /* acentos grandes, iconos activos (no texto pequeño) */
+  --turquesa-tinta: #0F7480;   /* botón primario y enlaces · 5.1:1 · blanco encima 5.5:1 */
+  --coral: #FF8A66;            /* ola, estrella, detalles (decorativo) */
+  --coral-tinta: #A3412A;      /* iniciales sobre coral claro · 5.0:1 */
+  --sol: #FFC547;              /* importes sobre océano profundo · 9.8:1 */
+  --alga: #2E7D5B;             /* asistió · 4.7:1 */
+  --miel: #8A5D00;             /* pendiente de pago · 5.4:1 */
+  --granada: #B23A2E;          /* error, deshacer · 5.6:1 */
+  --muted: #3F6676;            /* texto secundario · 5.8:1 */
+  --linea: #E8DFCC;            /* bordes (decorativo) */
 
-  /* Tintes para fondos de estado (texto bosque encima ≥ 7.6:1) */
-  --salvia-tinte: #E3E8DB;
-  --miel-tinte: #F6E4BC;
-  --terracota-tinte: #F5DCCD;
-  --granada-tinte: #F3D6D0;
+  /* Tintes de estado (texto océano encima ≥ 10:1) */
+  --espuma-tinte: #D5F0EC;
+  --sol-tinte: #FFE9A8;
+  --coral-tinte: #FFE0D3;
+  --granada-tinte: #FFDCD3;
 
   /* --- Roles semánticos --- */
-  --bg: var(--lino);
-  --surface: var(--papel);
-  --text: var(--bosque);
-  --text-strong: var(--bosque-profundo);
-  --text-muted: var(--salvia);
-  --accent: var(--terracota);
-  --accent-ink: var(--terracota-tinta);
-  --on-accent: var(--lino);
-  --line: var(--arena);
-  --ok: var(--salvia);
-  --ok-bg: var(--salvia-tinte);
+  --bg: var(--arena);
+  --surface: var(--espuma);
+  --text: var(--oceano);
+  --text-strong: var(--oceano-profundo);
+  --text-muted: var(--muted);
+  --accent: var(--turquesa);
+  --accent-ink: var(--turquesa-tinta);
+  --on-accent: #FFFFFF;
+  --decor: var(--coral);
+  --line: var(--linea);
+  --ok: var(--alga);
+  --ok-bg: var(--espuma-tinte);
   --warn: var(--miel);
-  --warn-bg: var(--miel-tinte);
+  --warn-bg: var(--sol-tinte);
   --danger: var(--granada);
   --danger-bg: var(--granada-tinte);
-  --logo: var(--bosque);
+  --avatar-bg: var(--coral-tinte);
+  --avatar-ink: var(--coral-tinta);
+  --bar-bg: var(--oceano-profundo);
+  --bar-text: #FFFFFF;
+  --bar-num: var(--sol);
+  --logo: var(--oceano);
 
-  /* Tipografía: la marca usa Abril Text (de pago). Newsreader es el sustituto libre más cercano;
-     con licencia web de Abril Text basta cambiar --font-display. */
+  /* --- Tipografía --- */
   --font-display: "Newsreader", "Abril Text", Georgia, serif;
-  --font-body: "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
 
+  /* --- Forma y espacio --- */
   --radius-sm: 12px;
   --radius-md: 16px;
-  --radius-lg: 24px;
-  --tap: 48px; /* objetivo táctil mínimo */
-  --space: 1rem;
+  --radius-lg: 22px;
+  --radius-organic: 22px 22px 22px 8px; /* esquina asimétrica de las tarjetas */
+  --tap: 48px;          /* objetivo táctil mínimo */
+  --space-1: .25rem;
+  --space-2: .5rem;
+  --space-3: .75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --nav-h: 68px;
+  --shadow: 0 1px 2px rgb(12 39 52 / .06), 0 4px 16px rgb(12 39 52 / .06);
+  --ease: cubic-bezier(.2, .8, .2, 1);
 }
 
-/* Modo oscuro "bosque de noche" (todos los textos ≥ 5:1 sobre fondo y superficie) */
+/* Modo oscuro "mar de noche" (todos los textos ≥ 5:1) */
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #1F2722;
-    --surface: #2A342D;
-    --text: var(--lino);
+    --bg: #0E2230;
+    --surface: #16303F;
+    --text: #EAF4F4;
     --text-strong: #FFFFFF;
-    --text-muted: #A9B59B;
-    --accent: #E3926A;
-    --accent-ink: #E3926A;
-    --on-accent: #1F2722;
-    --line: #4B5747;
-    --ok: #A9B59B;
-    --ok-bg: #34413A;
-    --warn: #E7BE6A;
-    --warn-bg: #3D3825;
-    --danger: #E8897A;
-    --danger-bg: #43302C;
-    --logo: var(--lino);
+    --text-muted: #9FC0C8;
+    --accent: #3CC6C9;
+    --accent-ink: #5FD3D5;
+    --on-accent: #0E2230;
+    --decor: #FF9C7A;
+    --line: #23465A;
+    --ok: #7FD1AE;
+    --ok-bg: #1E4A45;
+    --warn: #FFD27A;
+    --warn-bg: #3F3A22;
+    --danger: #FF9C8A;
+    --danger-bg: #4A2A27;
+    --avatar-bg: #3A2C2F;
+    --avatar-ink: #FF9C7A;
+    --bar-bg: #071822;
+    --logo: #EAF4F4;
+    --shadow: none;
   }
 }
