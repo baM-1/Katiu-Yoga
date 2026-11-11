@@ -36,6 +36,10 @@ KATIU_DATABASE_URL=sqlite:///data/demo.db uv run fastapi dev   # demo@katiu.loca
 | Nueva migración | `uv run alembic revision --autogenerate -m "qué cambia"` |
 | Todo lo del CI | `uv run ruff check . && uv run ruff format --check . && uv run pyright && uv run pytest` |
 
+## Despliegue
+Piloto en Fly.io (Madrid) con copia continua en Cloudflare R2. Guía paso a paso en
+[`docs/DEPLOY.md`](docs/DEPLOY.md) y razones en [ADR-0006](docs/adr/0006-despliegue-fly-litestream.md).
+
 ## Datos personales (RGPD)
 
 El Excel original va en `data/raw/` y la base de datos en `data/katiu.db`. **Ninguno de los dos
