@@ -37,4 +37,12 @@ TARIFAS_2026: list[PlanSeed] = [
     ),
     *_family("Individual online", PlanFormat.INDIVIDUAL, Modality.ONLINE, 2000, 7200, 14400),
     *_family("Grupal presencial", PlanFormat.GROUP, Modality.IN_PERSON, 3000, 10800, 20000),
+    # Tarifa especial vigente (confirmada por Lalo, 2026-11-11): solo para el grupo Reggio.
+    PlanSeed(
+        "Grupo Reggio · clase suelta",
+        PlanFormat.GROUP,
+        Modality.IN_PERSON,
+        PlanKind.DROP_IN,
+        2100,
+    ),
 ]

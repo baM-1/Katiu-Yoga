@@ -39,7 +39,7 @@ def test_es_idempotente(session: Session, xlsx: Path, report: ImportReport) -> N
     assert _count(session, Student) == 4
     assert _count(session, Attendance) == 4
     assert _count(session, Payment) == 3
-    assert _count(session, Plan) == 9 + 2
+    assert _count(session, Plan) == 10 + 2
 
 
 def test_limpia_alumnos(session: Session, report: ImportReport) -> None:
@@ -96,3 +96,11 @@ def test_informe_sin_nombres(report: ImportReport) -> None:
     md = render_markdown(report, "fake.xlsx")
     for name in ("Ana", "Bea", "Carla", "Dani", "Lesión"):
         assert name not in md  # el informe solo lleva IDs y cifras
+
+
+def test_tarifa_reggio_activa(session: Session, report: ImportReport) -> None:
+    plans = {p.name: p for p in session.exec(select(Plan)).all()}
+    reggio = plans["Grupo Reggio · clase suelta"]
+    assert reggio.active
+    assert reggio.price_cents == 2100
+    assert plans["Grupal presencial · clase suelta"].price_cents == 3000

@@ -81,10 +81,13 @@ erDiagram
 | Individual presencial | 35 € | 120 € | 216 € |
 | Individual online | 20 € | 72 € | 144 € |
 | Grupal presencial (desde 3 pers.) | 30 € | 108 € | 200 € |
+| Grupo Reggio (tarifa especial) | 21 € | n/a | n/a |
 
 Los bonos duran 60 días desde el pago. En el código están en `classes/catalog.py`. Los dos planes
 del Excel ("Clase individual" a 30 € y "Grupo Reggio" a 21 €) se importan como **históricos e
-inactivos**, para que las clases antiguas conserven su precio.
+inactivos**, para que las clases antiguas conserven su precio. La tarifa de 21 € sigue vigente
+solo para el grupo Reggio, así que existe además como plan activo "Grupo Reggio · clase suelta"
+(confirmado por Lalo el 2026-11-11). El resto de grupos van a 30 €.
 
 ## Importación del Excel
 `uv run python scripts/import_excel.py` aplica las migraciones, importa y escribe
