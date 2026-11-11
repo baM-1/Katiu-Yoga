@@ -67,9 +67,9 @@ def _schedule_page(
 @router.get("/ajustes/horario", response_class=HTMLResponse)
 def schedule(request: Request, db: DbSession, user: CurrentUser, ok: str = "") -> Response:
     messages = {
-        "franja": "¡Horario guardado! Las clases ya aparecen en Hoy 🌊",
+        "franja": "¡Horario guardado! Las clases ya aparecen en Hoy. Om.",
         "pausa": "Horario pausado.",
-        "extra": "¡Clase extra creada! 🌊",
+        "extra": "¡Clase extra creada! Más esterillas, más prana.",
     }
     return _schedule_page(request, db, message=messages.get(ok))
 

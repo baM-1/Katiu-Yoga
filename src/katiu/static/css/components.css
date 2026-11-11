@@ -7,13 +7,15 @@
 
 /* --- Logo (máscara: se pinta con var(--logo)) --- */
 .logo {
-  display: block; width: 4.5rem; aspect-ratio: 560 / 484; background: var(--logo);
-  mask: url("../img/logo-katiu-yoga.png") center / contain no-repeat;
-  -webkit-mask: url("../img/logo-katiu-yoga.png") center / contain no-repeat;
+  display: block; width: 4.5rem; aspect-ratio: 110.24 / 94.88; background: var(--logo);
+  mask: url("../img/logo-katiu-yoga.svg") center / contain no-repeat;
+  -webkit-mask: url("../img/logo-katiu-yoga.svg") center / contain no-repeat;
 }
 
-/* --- Ola (divisor) --- */
-.wave { width: 100%; height: 18px; color: var(--decor); margin: var(--space-3) 0; }
+/* --- Divisor: dos trazos y la estrella del logo --- */
+.divider { display: flex; align-items: center; gap: var(--space-3); color: var(--decor); margin: var(--space-3) 0; }
+.divider::before, .divider::after { content: ""; flex: 1; height: 1.5px; background: currentColor; opacity: .45; border-radius: 1px; }
+.divider svg { width: 14px; height: 14px; flex: none; }
 
 /* --- Botones --- */
 .btn {
@@ -87,13 +89,13 @@ a.card:active { transform: scale(.99); }
 .roster-item.is-on .roster-item__pay { color: var(--warn); border-left-color: rgb(0 0 0 / .06); }
 .roster-item.is-paid .roster-item__pay { color: var(--ok); }
 .roster-item[hidden] { display: none; }
-/* Microinteracción "ola": al marcar, una franja de luz recorre la tarjeta (200 ms). */
+/* Microinteracción "barrido de luz": al marcar, una franja de luz recorre la tarjeta (200 ms). */
 .roster-item.is-on::after {
   content: ""; position: absolute; inset: 0; pointer-events: none;
   background: linear-gradient(100deg, transparent 0%, rgb(255 255 255 / .55) 45%, transparent 70%);
-  transform: translateX(-100%); animation: wave-sweep .2s var(--ease) 1;
+  transform: translateX(-100%); animation: light-sweep .2s var(--ease) 1;
 }
-@keyframes wave-sweep { to { transform: translateX(100%); } }
+@keyframes light-sweep { to { transform: translateX(100%); } }
 
 /* --- Barra de totales (pegada sobre la navegación) --- */
 .totals {
@@ -106,17 +108,26 @@ a.card:active { transform: scale(.99); }
 
 /* --- Formularios --- */
 .field { display: grid; gap: var(--space-1); }
-.field label { font-weight: 500; font-size: .9rem; }
+.field label { font-weight: 500; font-size: .9rem; display: flex; align-items: center; gap: var(--space-1); flex-wrap: wrap; }
+.field label .icon { width: 16px; height: 16px; }
 .field small { color: var(--text-muted); }
 .input, select.input {
   width: 100%; min-height: var(--tap); padding: 0 var(--space-4); border-radius: var(--radius-sm);
   border: 1.5px solid var(--line); background: var(--surface); color: var(--text); font: 400 1rem var(--font-body);
 }
+textarea.input { min-height: 6rem; padding: var(--space-3) var(--space-4); line-height: 1.5; resize: vertical; }
+.check { display: flex; align-items: flex-start; gap: var(--space-3); min-height: var(--tap); padding: var(--space-2) 0; }
+.check input { width: 22px; height: 22px; margin-top: 2px; accent-color: var(--accent); flex: none; }
+.check small { display: block; color: var(--text-muted); }
+.form-actions { display: grid; grid-template-columns: 1fr 2fr; gap: var(--space-3); margin-top: var(--space-6); }
 .input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgb(22 163 168 / .2); }
 .search { position: relative; }
 .search svg { position: absolute; left: 14px; top: 50%; translate: 0 -50%; width: 20px; height: 20px; color: var(--text-muted); }
 .search .input { padding-left: 44px; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+/* Los inputs de fecha tienen un ancho mínimo propio: sin esto se salen de la pantalla. */
+.form-row > *, .input { min-width: 0; }
+input[type="date"].input { appearance: none; -webkit-appearance: none; display: flex; align-items: center; }
 
 /* --- Avisos (flash) --- */
 .notice { border-radius: var(--radius-md); padding: var(--space-3) var(--space-4); background: var(--ok-bg); }
