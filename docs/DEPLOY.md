@@ -67,24 +67,9 @@ $ exit
 El orden importa: primero el Excel (trae alumnos y precios históricos) y después
 `bootstrap.py` (horario de viernes y usuario). Los dos son idempotentes.
 
-## 3b. Dominio propio: app.estudio13.eu (opcional, recomendado)
-
-La web de Kat (`estudio13.eu`) sigue en Squarespace. Solo se apunta un **subdominio** a Fly:
-
-1. En el Mac: `fly certs add app.estudio13.eu --app katiu-yoga`. Fly muestra los registros DNS
-   que espera.
-2. En Squarespace → *Dominios* → `estudio13.eu` → *Configuración DNS* → **Añadir registro**:
-   - Tipo `CNAME`, host `app`, datos `katiu-yoga.fly.dev`.
-   - Si Fly lo pide, también el CNAME `_acme-challenge.app` que muestra el paso 1.
-3. Esperar unos minutos y comprobar: `fly certs show app.estudio13.eu --app katiu-yoga` debe
-   decir *Issued*. Fly renueva el certificado HTTPS solo.
-
-Desde entonces Kat entra en `https://app.estudio13.eu` (y `katiu-yoga.fly.dev` sigue
-funcionando). La web de Squarespace no se toca.
-
 ## 4. En el móvil de Kat
 
-1. Abrir `https://app.estudio13.eu` (o `https://katiu-yoga.fly.dev`) en Safari (o Chrome en Android) y entrar.
+1. Abrir `https://katiu-yoga.fly.dev` en Safari (o Chrome en Android) y entrar.
 2. Compartir → **Añadir a pantalla de inicio**. Desde ahí se abre como una app.
 3. Recomendado: que Kat cambie la contraseña en **Más → Contraseña**.
 
