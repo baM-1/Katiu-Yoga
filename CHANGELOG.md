@@ -7,7 +7,7 @@ Versionado: [SemVer](https://semver.org/lang/es/).
 ## [Sin publicar]
 
 ### Añadido (piloto)
-- **Despliegue en Fly.io** (Madrid): `Dockerfile` multietapa sin datos ni secretos, `fly.toml`
+- **Despliegue en Fly.io** (París): `Dockerfile` multietapa sin datos ni secretos, `fly.toml`
   con health check en `/salud` y apagado automático. ADR-0006.
 - **Copia continua con Litestream** a Cloudflare R2 (UE) y restauración automática al arrancar
   en un disco vacío (`deploy/start.sh`).
