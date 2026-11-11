@@ -1,0 +1,75 @@
+/* Tokens de marca Katiu Yoga: paleta "Bosque & Lino" (refresh 2026-11, ADR-0002).
+   Única fuente de color, tipografía y forma. Hay dos capas:
+   1) colores de marca (--bosque, --terracota...) y
+   2) roles semánticos (--text, --accent, --ok...), que es lo ÚNICO que usan los componentes.
+   Todos los pares texto/fondo cumplen WCAG AA (≥ 4.5:1); los ratios están anotados. */
+:root {
+  /* --- Marca --- */
+  --bosque: #34433A;          /* texto y navegación · 9.1:1 sobre lino */
+  --bosque-profundo: #26322B; /* titulares, barra inferior */
+  --lino: #F4EFE6;            /* fondo */
+  --papel: #FBF9F5;           /* tarjetas */
+  --terracota: #C8602E;       /* estrella, iconos, acentos grandes (no texto pequeño) */
+  --terracota-tinta: #A2461C; /* botón primario y enlaces · 5.4:1 */
+  --salvia: #5D6A50;          /* texto secundario, "asistió" · 5.0:1 */
+  --arena: #CDB896;           /* bordes y separadores (decorativo) */
+  --miel: #8A5F0C;            /* "pendiente de pago" · 4.9:1 */
+  --granada: #9E3B2E;         /* errores, deshacer · 5.9:1 */
+
+  /* Tintes para fondos de estado (texto bosque encima ≥ 7.6:1) */
+  --salvia-tinte: #E3E8DB;
+  --miel-tinte: #F6E4BC;
+  --terracota-tinte: #F5DCCD;
+  --granada-tinte: #F3D6D0;
+
+  /* --- Roles semánticos --- */
+  --bg: var(--lino);
+  --surface: var(--papel);
+  --text: var(--bosque);
+  --text-strong: var(--bosque-profundo);
+  --text-muted: var(--salvia);
+  --accent: var(--terracota);
+  --accent-ink: var(--terracota-tinta);
+  --on-accent: var(--lino);
+  --line: var(--arena);
+  --ok: var(--salvia);
+  --ok-bg: var(--salvia-tinte);
+  --warn: var(--miel);
+  --warn-bg: var(--miel-tinte);
+  --danger: var(--granada);
+  --danger-bg: var(--granada-tinte);
+  --logo: var(--bosque);
+
+  /* Tipografía: la marca usa Abril Text (de pago). Newsreader es el sustituto libre más cercano;
+     con licencia web de Abril Text basta cambiar --font-display. */
+  --font-display: "Newsreader", "Abril Text", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --tap: 48px; /* objetivo táctil mínimo */
+  --space: 1rem;
+}
+
+/* Modo oscuro "bosque de noche" (todos los textos ≥ 5:1 sobre fondo y superficie) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1F2722;
+    --surface: #2A342D;
+    --text: var(--lino);
+    --text-strong: #FFFFFF;
+    --text-muted: #A9B59B;
+    --accent: #E3926A;
+    --accent-ink: #E3926A;
+    --on-accent: #1F2722;
+    --line: #4B5747;
+    --ok: #A9B59B;
+    --ok-bg: #34413A;
+    --warn: #E7BE6A;
+    --warn-bg: #3D3825;
+    --danger: #E8897A;
+    --danger-bg: #43302C;
+    --logo: var(--lino);
+  }
+}

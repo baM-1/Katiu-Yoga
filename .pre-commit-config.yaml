@@ -1,0 +1,31 @@
+# Se ejecuta antes de cada commit: `uv run pre-commit install` una sola vez.
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-added-large-files
+        args: [--maxkb=500]
+      - id: detect-private-key
+  - repo: local
+    hooks:
+      # Barrera RGPD: rechaza cualquier Excel, base de datos o .env que se cuele en un commit.
+      - id: no-datos-personales
+        name: no subir datos personales (xlsx, csv, db, .env)
+        entry: "Datos personales o secretos: estos archivos no van a git."
+        language: fail
+        files: '(\.xlsx|\.xls|\.csv|\.db|\.sqlite3?|(^|/)\.env)$'
+        exclude: '\.env\.example$'
+      - id: ruff-check
+        name: ruff (lint)
+        entry: uv run ruff check --fix
+        language: system
+        types: [python]
+      - id: ruff-format
+        name: ruff (formato)
+        entry: uv run ruff format
+        language: system
+        types: [python]
