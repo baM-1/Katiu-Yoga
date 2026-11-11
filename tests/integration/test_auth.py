@@ -41,3 +41,17 @@ def test_post_con_sesion_pero_sin_csrf_se_rechaza(logged: TestClient) -> None:
 def test_salir(logged: TestClient) -> None:
     assert logged.post("/salir", follow_redirects=False).status_code == 303
     assert logged.get("/", follow_redirects=False).status_code == 303
+
+
+def test_reset_password_desde_terminal(session, user: None) -> None:  # type: ignore[no-untyped-def]
+    import pytest
+
+    from katiu.accounts.service import AccountError, authenticate, reset_password
+
+    reset_password(session, "KAT@ejemplo.com", "nueva-ola-123")
+    assert authenticate(session, "kat@ejemplo.com", "nueva-ola-123") is not None
+    assert authenticate(session, "kat@ejemplo.com", PASSWORD) is None
+    with pytest.raises(AccountError):
+        reset_password(session, "nadie@ejemplo.com", "nueva-ola-123")
+    with pytest.raises(AccountError):
+        reset_password(session, "kat@ejemplo.com", "corta")

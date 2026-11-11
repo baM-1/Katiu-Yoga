@@ -53,3 +53,19 @@ def change_password(session: Session, user: User, current: str, new: str) -> Non
 
 
 _DUMMY_HASH = hash_password("contraseña-ficticia-para-igualar-tiempos")
+
+
+def reset_password(session: Session, email: str, new: str) -> User:
+    """Restablece la contraseña sin pedir la actual. Solo desde la terminal del servidor
+    (scripts/reset_password.py): quien llega ahí ya es administrador."""
+    user = UserRepository(session).by_email(email)
+    if user is None:
+        raise AccountError("No existe un usuario con ese email.")
+    if len(new) < MIN_PASSWORD_LENGTH:
+        raise AccountError(
+            f"La nueva contraseña debe tener al menos {MIN_PASSWORD_LENGTH} caracteres."
+        )
+    user.password_hash = hash_password(new)
+    session.add(user)
+    session.commit()
+    return user
