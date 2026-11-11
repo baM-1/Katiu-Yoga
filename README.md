@@ -4,7 +4,7 @@ Mini app web para que Kat lleve a sus alumnos, las asistencias, los cobros y los
 **desde el móvil y sin volver a copiar un ID**. Sustituye a la hoja de Google Sheets
 `Katiu_Yoga_CONTROL`.
 
-> Estado: **Fase 0 (arranque)**. Ver el [roadmap](#fases) y el [CHANGELOG](CHANGELOG.md).
+> Estado: **Fase 1 (cimientos y datos limpios)**. Ver el [roadmap](#fases) y el [CHANGELOG](CHANGELOG.md).
 
 ## Arrancar en local
 
@@ -14,6 +14,7 @@ Necesitas [uv](https://docs.astral.sh/uv/) (instala Python 3.13 por ti).
 uv sync                      # crea .venv e instala dependencias exactas (uv.lock)
 cp .env.example .env         # configuración local
 uv run pre-commit install    # activa los checks antes de cada commit
+uv run alembic upgrade head  # crea/actualiza la base de datos (data/katiu.db)
 uv run fastapi dev           # http://127.0.0.1:8000 → "Hola Kat 🌊"
 ```
 
@@ -25,6 +26,8 @@ uv run fastapi dev           # http://127.0.0.1:8000 → "Hola Kat 🌊"
 | Lint | `uv run ruff check .` |
 | Formato | `uv run ruff format .` |
 | Tipos | `uv run pyright` |
+| Importar el Excel | `uv run python scripts/import_excel.py` (idempotente; informe en `data/import_report.md`) |
+| Nueva migración | `uv run alembic revision --autogenerate -m "qué cambia"` |
 | Todo lo del CI | `uv run ruff check . && uv run ruff format --check . && uv run pyright && uv run pytest` |
 
 ## Datos personales (RGPD)
@@ -54,8 +57,8 @@ Por qué está organizada así: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) y
 
 ## Fases
 
-0. **Arranque:** repo, herramientas, CI, "Hola Kat". ← *aquí*
-1. Cimientos y datos limpios: modelo, migraciones, importación del Excel.
+0. Arranque: repo, herramientas, CI, "Hola Kat". ✓
+1. **Cimientos y datos limpios:** modelo, migraciones, importación del Excel. ← *aquí*
 2. Pasar lista en 3 toques: login, diseño con la marca de Kat, Hoy, Pasar lista, Alumnos, PWA.
 3. Dinero y panorama: saldos, pagos, dashboard, exportación.
 4. Recordatorios y despliegue.
