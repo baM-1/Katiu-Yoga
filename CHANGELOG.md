@@ -6,6 +6,10 @@ Versionado: [SemVer](https://semver.org/lang/es/).
 
 ## [Sin publicar]
 
+### Cambiado
+- Tarifa especial **Grupo Reggio · clase suelta (21 €)** como plan activo. El resto de clases
+  grupales siguen a 30 €.
+
 ### Añadido (Fase 2: pasar lista en 3 toques)
 - **Login** con argon2id, sesión en una cookie firmada (30 días), CSRF en todos los POST, límite
   de 5 intentos cada 15 minutos y cabeceras de seguridad (CSP estricta, HSTS en producción).
