@@ -17,6 +17,8 @@ alembic upgrade head
 
 APP="uvicorn katiu.main:app --host 0.0.0.0 --port 8000 --proxy-headers --forwarded-allow-ips=*"
 if [ -n "${LITESTREAM_BUCKET:-}" ]; then
+  # El Panel de Admin lee aquí si la copia va al día (ver deploy/litestream.yml, addr).
+  export KATIU_LITESTREAM_METRICS_URL="http://127.0.0.1:9090/metrics"
   exec litestream replicate -config /etc/litestream.yml -exec "$APP"
 else
   exec $APP

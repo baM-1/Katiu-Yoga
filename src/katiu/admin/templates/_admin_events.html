@@ -1,0 +1,9 @@
+<ol class="timeline" role="list">
+  {% for e in events %}
+  {% set local = e.at.astimezone(tz) %}
+  <li class="timeline__item{% if e.alert %} timeline__item--alert{% endif %}">
+    <time datetime="{{ e.at.isoformat() }}">{{ local.strftime("%d/%m %H:%M") }}</time>
+    <p><b>{{ e.who }}</b> {{ e.what }}{% if e.target %}: {% if e.target_url %}<a href="{{ e.target_url }}">{{ e.target }}</a>{% else %}{{ e.target }}{% endif %}{% endif %}</p>
+  </li>
+  {% endfor %}
+</ol>

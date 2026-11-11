@@ -1,5 +1,7 @@
 # Litestream copia cada cambio de SQLite a un bucket S3-compatible (Cloudflare R2).
 # Las credenciales llegan como secretos: LITESTREAM_ACCESS_KEY_ID y LITESTREAM_SECRET_ACCESS_KEY.
+# Métricas para el Panel de Admin (estado de la copia). Solo dentro de la máquina: 127.0.0.1.
+addr: "127.0.0.1:9090"
 dbs:
   - path: /data/katiu.db
     replicas:

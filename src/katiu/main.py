@@ -8,6 +8,8 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 
 from katiu.accounts.routes import router as accounts_router
+from katiu.admin.routes import router as admin_router
+from katiu.admin.routes import write as admin_write
 from katiu.attendance.routes import router as attendance_router
 from katiu.attendance.routes import write as attendance_write
 from katiu.classes.routes import router as classes_router
@@ -58,6 +60,8 @@ def create_app() -> FastAPI:
         students_write,
         settings_router,
         settings_write,
+        admin_router,
+        admin_write,
     ):
         app.include_router(router)
 
