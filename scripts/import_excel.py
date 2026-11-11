@@ -40,7 +40,8 @@ def main() -> None:
     mismatches = sum(not r.matches for r in report.reconciliation)
     print(f"✓ Importado. Creados: {dict(report.created)} · Actualizados: {dict(report.updated)}")
     print(f"  Anomalías: {len(report.anomalies)} · Alumnos que no cuadran: {mismatches}")
-    print(f"  Informe: {args.report.relative_to(ROOT)}")
+    # La ruta puede estar fuera del repo (p. ej. /tmp en el servidor): no usar relative_to.
+    print(f"  Informe: {args.report}")
 
 
 if __name__ == "__main__":
