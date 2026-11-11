@@ -56,6 +56,6 @@ Por qué está organizada así: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) y
 
 0. **Arranque:** repo, herramientas, CI, "Hola Kat". ← *aquí*
 1. Cimientos y datos limpios: modelo, migraciones, importación del Excel.
-2. Pasar lista en 3 toques: login, diseño Boho Surf, Hoy, Pasar lista, Alumnos, PWA.
+2. Pasar lista en 3 toques: login, diseño con la marca de Kat, Hoy, Pasar lista, Alumnos, PWA.
 3. Dinero y panorama: saldos, pagos, dashboard, exportación.
 4. Recordatorios y despliegue.
