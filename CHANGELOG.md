@@ -6,6 +6,11 @@ Versionado: [SemVer](https://semver.org/lang/es/).
 
 ## [Sin publicar]
 
+### Cambiado (observaciones de Kat)
+- Textos con guiños de surf (🌊, "próxima ola", "día de mar") pasan a guiños de yoga y sánscrito
+  (namasté, savasana, santosha, om shanti).
+- Logo en SVG (vector, más nítido) en lugar de PNG. Caché del service worker a `katiu-v2`.
+
 ### Añadido (piloto)
 - **Despliegue en Fly.io** (Madrid): `Dockerfile` multietapa sin datos ni secretos, `fly.toml`
   con health check en `/salud` y apagado automático. ADR-0006.

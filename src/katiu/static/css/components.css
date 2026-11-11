@@ -7,9 +7,9 @@
 
 /* --- Logo (máscara: se pinta con var(--logo)) --- */
 .logo {
-  display: block; width: 4.5rem; aspect-ratio: 560 / 484; background: var(--logo);
-  mask: url("../img/logo-katiu-yoga.png") center / contain no-repeat;
-  -webkit-mask: url("../img/logo-katiu-yoga.png") center / contain no-repeat;
+  display: block; width: 4.5rem; aspect-ratio: 110.24 / 94.88; background: var(--logo);
+  mask: url("../img/logo-katiu-yoga.svg") center / contain no-repeat;
+  -webkit-mask: url("../img/logo-katiu-yoga.svg") center / contain no-repeat;
 }
 
 /* --- Ola (divisor) --- */
