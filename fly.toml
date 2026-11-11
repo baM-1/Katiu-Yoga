@@ -1,0 +1,31 @@
+# Configuración de Fly.io. El nombre de la app se elige al crearla (fly apps create).
+app = "katiu-yoga"
+primary_region = "mad"  # Madrid: los datos se quedan en la UE
+
+[build]
+
+[env]
+  KATIU_TIMEZONE = "Europe/Madrid"
+
+[mounts]
+  source = "katiu_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  # Se apaga sola si nadie la usa y despierta en ~2 s con la primera visita: casi gratis.
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [[http_service.checks]]
+    grace_period = "15s"
+    interval = "30s"
+    method = "GET"
+    path = "/salud"
+    timeout = "5s"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"

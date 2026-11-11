@@ -1,0 +1,17 @@
+# Nada de datos personales ni secretos dentro de la imagen.
+data/
+backups/
+*.db
+*.db-*
+*.xlsx
+*.csv
+.env
+.env.*
+# Ni cosas que solo sirven en el portátil.
+.git/
+.venv/
+**/__pycache__/
+.pytest_cache/
+.ruff_cache/
+tests/
+docs/
