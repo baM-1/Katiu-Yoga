@@ -50,12 +50,13 @@ de la lista 64 px.
 | Desplegable | `.disclosure` | "+ Alumno nuevo" sin salir de la pantalla |
 | Lista | `.list`, `.list-row` | alumnos, ajustes |
 | Navegación | `.tabbar` | Hoy · Alumnos · Dinero · Más |
-| Ola | `partials/wave.html` | divisor dibujado a mano, en coral |
+| Divisor | `partials/divider.html` | dos trazos y la estrella del logo, en coral |
+| Formulario | `.field`, `.form-row`, `.check`, `.form-actions` | editar ficha; fechas sin desbordar |
 | Iconos | `{{ icon("sun") }}` | Lucide inline, `currentColor` |
 
 ## Microinteracciones
 - Al marcar a alguien, la tarjeta pasa a fondo `--ok-bg` con el avatar en verde ✓, y una franja
-  de luz la recorre en 200 ms ("ola").
+  de luz la recorre en 200 ms.
 - Todo respeta `prefers-reduced-motion`.
 
 ## Tono
@@ -66,3 +67,12 @@ llama así… ¿alumno nuevo?". Nunca "Registro guardado correctamente".
 Contraste AA medido en cada par de colores. Foco visible (anillo turquesa). Etiquetas reales en
 los inputs. `aria-pressed` en los toques. `aria-live` en los totales. Sin estilos ni scripts en
 línea (lo exige la CSP).
+
+## Tono de los textos
+Yoga y sánscrito con humor, sin referencias al surf (petición de Kat, 2026-11-11). Ejemplos:
+"Hoy no hay clase. Savasana oficial.", "Que fluya el prana.", "Aún en postura del niño".
+Frases cortas, tuteo y sin emojis en los mensajes de la app.
+
+## Logo
+`static/img/logo-katiu-yoga.svg` (vectorial, entregado por Lalo). Se usa como máscara CSS: se
+pinta con `--logo`, así cambia de color solo en modo oscuro.
