@@ -6,6 +6,27 @@ Versionado: [SemVer](https://semver.org/lang/es/).
 
 ## [Sin publicar]
 
+### Añadido (Fase 2: pasar lista en 3 toques)
+- **Login** con argon2id, sesión en una cookie firmada (30 días), CSRF en todos los POST, límite
+  de 5 intentos cada 15 minutos y cabeceras de seguridad (CSP estricta, HSTS en producción).
+  ADR-0004.
+- **Hoy**: las clases del día y las próximas, generadas solas a partir del horario fijo.
+- **Pasar lista**: un toque marca "vino", otro marca "pagado" (en efectivo por defecto),
+  habituales de la franja primero, buscador instantáneo, alta rápida sin salir de la pantalla y
+  totales en vivo (cobrado y pendiente).
+- **Alumnos**: lista con buscador, ficha (datos, salud protegida, saldo, historial) y botón de
+  WhatsApp.
+- **Más → Horario**: añadir o pausar clases fijas y crear clases extra puntuales. ADR-0005.
+- **Contraseña**: cambiarla desde la app.
+- **PWA instalable**: manifest, service worker (estáticos en caché, páginas con la red primero,
+  aviso sin conexión) e iconos.
+- Paleta **"Marea turquesa"** con tokens de marca y roles, modo oscuro "mar de noche",
+  componentes documentados en `docs/DESIGN_SYSTEM.md` y página `/_estilo`.
+- Scripts `bootstrap.py` (tarifas, horario de viernes a las 9:00 y a las 10:15, y usuario) y
+  `seed_demo.py` (datos ficticios).
+- 85 tests.
+
+
 ### Añadido (Fase 1: cimientos y datos limpios)
 - Modelo de datos con SQLModel: planes, horario recurrente, clases, alumnos, asistencias, pagos,
   bonos y registro de recordatorios. Diagrama ER en `docs/DATA_MODEL.md` y ADR-0003.

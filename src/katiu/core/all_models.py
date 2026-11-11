@@ -3,6 +3,7 @@
 Alembic y los tests importan este módulo: si un modelo no aparece aquí, no existe para ellos.
 """
 
+from katiu.accounts.models import User
 from katiu.attendance.models import Attendance
 from katiu.classes.models import ClassSession, Plan, ScheduleSlot
 from katiu.payments.models import PackPurchase, Payment
@@ -18,4 +19,5 @@ __all__ = [
     "ReminderLog",
     "ScheduleSlot",
     "Student",
+    "User",
 ]

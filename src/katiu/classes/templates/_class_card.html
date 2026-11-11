@@ -1,0 +1,13 @@
+{# Tarjeta de clase. Variables: card (SessionCard), is_today (bool) #}
+<a class="card class-card{% if is_today %} class-card--today{% endif %}" href="/clases/{{ card.session.id }}">
+  <span class="class-card__time">{{ card.session.start_time.strftime("%H:%M") }}</span>
+  <span>
+    <span class="class-card__title">{{ card.plan.name.split(" · ")[0] }}</span><br>
+    <span class="class-card__meta">
+      {%- if not is_today %}{{ human_date(card.session.date) | capitalize }}{% if card.attendees %} · {{ card.attendees }} apuntadas{% endif %}
+      {%- elif card.attendees %}{{ card.attendees }} {{ "persona" if card.attendees == 1 else "personas" }} ✓
+      {%- else %}Toca para pasar lista{% endif %}
+    </span>
+  </span>
+  <span class="class-card__go">{{ icon("chevron") }}</span>
+</a>

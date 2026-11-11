@@ -1,0 +1,200 @@
+/* Componentes. Cada bloque = un componente documentado en docs/DESIGN_SYSTEM.md y en /_estilo. */
+
+/* --- Icono base (los componentes lo redimensionan cuando hace falta) --- */
+.icon { width: 20px; height: 20px; flex: none; }
+.back { display: inline-flex; min-width: var(--tap); min-height: var(--tap); align-items: center; color: var(--text-muted); }
+.back .icon { width: 24px; height: 24px; }
+
+/* --- Logo (máscara: se pinta con var(--logo)) --- */
+.logo {
+  display: block; width: 4.5rem; aspect-ratio: 560 / 484; background: var(--logo);
+  mask: url("../img/logo-katiu-yoga.png") center / contain no-repeat;
+  -webkit-mask: url("../img/logo-katiu-yoga.png") center / contain no-repeat;
+}
+
+/* --- Ola (divisor) --- */
+.wave { width: 100%; height: 18px; color: var(--decor); margin: var(--space-3) 0; }
+
+/* --- Botones --- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+  min-height: var(--tap); padding: 0 1.25rem; border: 0; border-radius: var(--radius-md);
+  font: 600 1rem var(--font-body); text-decoration: none; cursor: pointer;
+  background: var(--accent-ink); color: var(--on-accent);
+  transition: transform .12s var(--ease), filter .12s;
+}
+.btn:active { transform: scale(.97); }
+.btn:hover { filter: brightness(1.06); }
+.btn--block { width: 100%; }
+.btn--ghost { background: transparent; color: var(--accent-ink); border: 1.5px solid var(--line); }
+.btn--danger { background: var(--danger); color: #fff; }
+.btn svg { width: 20px; height: 20px; }
+
+/* --- Pills de estado --- */
+.pill {
+  display: inline-flex; align-items: center; gap: .3rem; border-radius: 999px;
+  padding: .3rem .75rem; font-size: .82rem; font-weight: 500; color: var(--text);
+  background: var(--line); white-space: nowrap;
+}
+.pill svg { width: 14px; height: 14px; }
+.pill--ok { background: var(--ok-bg); }
+.pill--warn { background: var(--warn-bg); }
+.pill--danger { background: var(--danger-bg); }
+
+/* --- Tarjeta --- */
+.card {
+  display: block; background: var(--surface); color: inherit; text-decoration: none;
+  border-radius: var(--radius-organic); padding: var(--space-4); border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+a.card:active { transform: scale(.99); }
+
+/* --- Tarjeta de clase (pantalla Hoy) --- */
+.class-card { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: var(--space-4); }
+.class-card__time { font: 600 1.6rem/1 var(--font-display); color: var(--text-strong); min-width: 4.2rem; }
+.class-card__title { font-weight: 600; }
+.class-card__meta { color: var(--text-muted); font-size: .9rem; }
+.class-card__go { color: var(--accent-ink); }
+.class-card--today { border: 2px solid var(--accent); }
+
+/* --- Avatar de iniciales --- */
+.avatar {
+  flex: none; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--avatar-bg); color: var(--avatar-ink); font-weight: 600; font-size: .95rem;
+  transition: background .2s var(--ease), color .2s var(--ease);
+}
+
+/* --- Lista para pasar lista --- */
+.roster { display: grid; gap: var(--space-2); list-style: none; margin: 0; padding: 0; }
+.roster-item {
+  display: grid; grid-template-columns: 1fr auto; align-items: stretch;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-organic);
+  overflow: hidden; position: relative;
+}
+.roster-item__toggle {
+  display: flex; align-items: center; gap: var(--space-3); min-height: 64px; padding: var(--space-2) var(--space-3);
+  background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer;
+}
+.roster-item__name { font-weight: 600; display: block; }
+.roster-item__hint { color: var(--text-muted); font-size: .85rem; }
+.roster-item__pay {
+  width: 108px; border: 0; border-left: 1px solid var(--line); background: none;
+  font: 600 .85rem var(--font-body); color: var(--text-muted); cursor: pointer; padding: 0 var(--space-3);
+}
+.roster-item.is-on { background: var(--ok-bg); border-color: transparent; }
+.roster-item.is-on .avatar { background: var(--ok); color: var(--on-accent); }
+.avatar .icon { width: 24px; height: 24px; stroke-width: 2.5; }
+.roster-item.is-on .roster-item__pay { color: var(--warn); border-left-color: rgb(0 0 0 / .06); }
+.roster-item.is-paid .roster-item__pay { color: var(--ok); }
+.roster-item[hidden] { display: none; }
+/* Microinteracción "ola": al marcar, una franja de luz recorre la tarjeta (200 ms). */
+.roster-item.is-on::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(100deg, transparent 0%, rgb(255 255 255 / .55) 45%, transparent 70%);
+  transform: translateX(-100%); animation: wave-sweep .2s var(--ease) 1;
+}
+@keyframes wave-sweep { to { transform: translateX(100%); } }
+
+/* --- Barra de totales (pegada sobre la navegación) --- */
+.totals {
+  position: sticky; bottom: calc(var(--nav-h) + var(--space-3) + env(safe-area-inset-bottom));
+  margin-top: var(--space-4); display: flex; justify-content: space-between; align-items: center;
+  background: var(--bar-bg); color: var(--bar-text); border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4); font-size: .95rem; box-shadow: 0 8px 24px rgb(12 39 52 / .25);
+}
+.totals b { color: var(--bar-num); font-size: 1.05rem; }
+
+/* --- Formularios --- */
+.field { display: grid; gap: var(--space-1); }
+.field label { font-weight: 500; font-size: .9rem; }
+.field small { color: var(--text-muted); }
+.input, select.input {
+  width: 100%; min-height: var(--tap); padding: 0 var(--space-4); border-radius: var(--radius-sm);
+  border: 1.5px solid var(--line); background: var(--surface); color: var(--text); font: 400 1rem var(--font-body);
+}
+.input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgb(22 163 168 / .2); }
+.search { position: relative; }
+.search svg { position: absolute; left: 14px; top: 50%; translate: 0 -50%; width: 20px; height: 20px; color: var(--text-muted); }
+.search .input { padding-left: 44px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+
+/* --- Avisos (flash) --- */
+.notice { border-radius: var(--radius-md); padding: var(--space-3) var(--space-4); background: var(--ok-bg); }
+.notice--error { background: var(--danger-bg); }
+
+/* --- Desplegable "+ Alumno nuevo" --- */
+.disclosure { background: var(--surface); border: 1.5px dashed var(--line); border-radius: var(--radius-organic); }
+.disclosure > summary {
+  list-style: none; min-height: var(--tap); display: flex; align-items: center; gap: var(--space-2);
+  padding: 0 var(--space-4); font-weight: 600; color: var(--accent-ink); cursor: pointer;
+}
+.disclosure > summary::-webkit-details-marker { display: none; }
+.disclosure > summary svg { width: 20px; height: 20px; }
+.disclosure__body { padding: 0 var(--space-4) var(--space-4); display: grid; gap: var(--space-3); }
+
+/* --- Lista simple (alumnos, ajustes) --- */
+.list { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
+.list > li + li { border-top: 1px solid var(--line); }
+.list-row {
+  display: flex; align-items: center; gap: var(--space-3); min-height: 64px; padding: var(--space-2) var(--space-4);
+  color: inherit; text-decoration: none;
+}
+.list-row__main { flex: 1; min-width: 0; }
+.list-row__main b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.list-row__main span { color: var(--text-muted); font-size: .88rem; }
+.list-row svg { width: 20px; height: 20px; color: var(--text-muted); flex: none; }
+
+/* --- Ficha de alumno --- */
+.profile-head { display: flex; align-items: center; gap: var(--space-4); }
+.profile-head .avatar { width: 64px; height: 64px; font-size: 1.3rem; }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: var(--space-2) var(--space-4); }
+.kv dt { color: var(--text-muted); }
+.kv dd { margin: 0; text-align: right; font-weight: 500; }
+.sensitive { border-left: 4px solid var(--decor); }
+.balance { font: 600 2rem/1 var(--font-display); }
+.balance--debt { color: var(--warn); }
+.balance--ok { color: var(--ok); }
+.actions { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+
+/* --- Navegación inferior --- */
+.tabbar {
+  position: fixed; inset: auto 0 0 0; z-index: 10; height: calc(var(--nav-h) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom); display: grid; grid-template-columns: repeat(4, 1fr);
+  background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(12px);
+  border-top: 1px solid var(--line);
+}
+.tabbar a {
+  display: grid; place-items: center; align-content: center; gap: 2px; text-decoration: none;
+  color: var(--text-muted); font-size: .72rem; font-weight: 500;
+}
+.tabbar svg { width: 24px; height: 24px; }
+.tabbar a[aria-current="page"] { color: var(--accent-ink); }
+.tabbar a[aria-current="page"] svg { stroke-width: 2.4; }
+
+/* --- Estado vacío --- */
+.empty { text-align: center; padding: var(--space-8) var(--space-4); color: var(--text-muted); }
+.empty h2 { margin-bottom: var(--space-2); }
+
+/* --- Swatches (solo /_estilo) --- */
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--space-2); }
+.swatch { border-radius: var(--radius-md); padding: var(--space-3); min-height: 72px; display: flex; flex-direction: column; justify-content: flex-end; font-size: .8rem; border: 1px solid var(--line); }
+
+/* --- Login --- */
+.login { padding-top: 10vh; }
+.login__logo { width: 8.5rem; }
+
+/* --- Swatches de /_estilo (una clase por color: la CSP no permite estilos en línea) --- */
+.sg-oceano { background: var(--oceano); color: #fff; }
+.sg-oceano-profundo { background: var(--oceano-profundo); color: #fff; }
+.sg-arena { background: var(--arena); color: var(--oceano-profundo); }
+.sg-espuma { background: var(--espuma); color: var(--oceano-profundo); }
+.sg-turquesa { background: var(--turquesa); color: var(--oceano-profundo); }
+.sg-turquesa-tinta { background: var(--turquesa-tinta); color: #fff; }
+.sg-coral { background: var(--coral); color: var(--oceano-profundo); }
+.sg-coral-tinta { background: var(--coral-tinta); color: #fff; }
+.sg-sol { background: var(--sol); color: var(--oceano-profundo); }
+.sg-alga { background: var(--alga); color: #fff; }
+.sg-miel { background: var(--miel); color: #fff; }
+.sg-granada { background: var(--granada); color: #fff; }
+.sg-muted { background: var(--muted); color: #fff; }
+.sg-linea { background: var(--linea); color: var(--oceano-profundo); }

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="page-head">
+  <div>
+    <p class="eyebrow">{{ human_date(today) }}</p>
+    <h1>{{ greeting }}</h1>
+  </div>
+  <span class="logo" role="img" aria-label="Katiu Yoga"></span>
+</header>
+{% include "partials/wave.html" %}
+
+{% if todays %}
+  <p class="lede">{{ "Hoy tienes una clase" if todays | length == 1 else "Hoy tienes " ~ (todays | length) ~ " clases" }} 🌊</p>
+  <div class="stack mt-4">
+    {% for card in todays %}{% with is_today=true %}{% include "_class_card.html" %}{% endwith %}{% endfor %}
+  </div>
+{% else %}
+  <p class="lede">Hoy no hay clase. Día de mar 🏄‍♀️</p>
+{% endif %}
+
+{% if upcoming %}
+<section class="section">
+  <h2>Próximas</h2>
+  <div class="stack">
+    {% for card in upcoming %}{% with is_today=false %}{% include "_class_card.html" %}{% endwith %}{% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% if not todays and not upcoming %}
+<div class="empty">
+  <h2>Aún no hay horario</h2>
+  <p>Configura tus clases fijas y aparecerán aquí solas cada semana.</p>
+  <a class="btn mt-4" href="/ajustes/horario">{{ icon("calendar") }} Configurar horario</a>
+</div>
+{% endif %}
+
+<p class="center mt-6"><a href="/ajustes/horario#extra">+ Abrir una clase extra</a></p>
+{% endblock %}
