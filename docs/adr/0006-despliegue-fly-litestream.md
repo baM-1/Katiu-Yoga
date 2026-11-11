@@ -1,4 +1,4 @@
-# ADR-0006: Piloto en Fly.io (Madrid) con SQLite + Litestream
+# ADR-0006: Piloto en Fly.io (París) con SQLite + Litestream
 
 - **Estado:** aceptada
 - **Fecha:** 2026-11-11
@@ -10,7 +10,7 @@ La app guarda datos de salud: tienen que quedarse en la UE y no perderse nunca. 
 dos personas, unas pocas veces por semana. Queremos coste mínimo y cero mantenimiento.
 
 ## Opciones
-1. **Fly.io + volumen + Litestream → R2.** Máquina en Madrid, se apaga sola, SQLite tal cual,
+1. **Fly.io + volumen + Litestream → R2.** Máquina en París (Fly ya no ofrece Madrid), se apaga sola, SQLite tal cual,
    copia continua fuera de Fly.
 2. **Render/Railway + PostgreSQL gestionado.** Más caro (≥ 7 €/mes por la BD) y obliga a
    migrar de SQLite sin necesitarlo.
@@ -24,7 +24,7 @@ Los secretos solo viven en `fly secrets`. El despliegue continuo va por GitHub A
 existe `FLY_API_TOKEN`.
 
 ## Consecuencias
-- ✅ 2-4 €/mes, datos en la UE (Fly `mad` + R2 con jurisdicción UE), restauración automática.
+- ✅ 2-4 €/mes, datos en la UE (Fly `cdg` + R2 con jurisdicción UE), restauración automática.
 - ✅ El código no cambia: misma SQLite que en local (se añade `busy_timeout` para convivir con
   Litestream).
 - ⚠️ Una sola máquina: si Fly cae, la app cae (aceptable para un piloto).
