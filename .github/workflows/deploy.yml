@@ -1,0 +1,41 @@
+name: Despliegue
+
+# Despliega en Fly.io cada vez que la CI pasa en main.
+# Necesita el secreto FLY_API_TOKEN en GitHub (Settings → Secrets → Actions).
+# Sin ese secreto, el job se salta y no falla.
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: despliegue
+  cancel-in-progress: false
+
+jobs:
+  fly:
+    name: Desplegar en Fly.io
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    env:
+      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+      - name: Comprobar el token
+        id: token
+        run: |
+          if [ -z "$FLY_API_TOKEN" ]; then
+            echo "FLY_API_TOKEN no configurado: no se despliega." >> "$GITHUB_STEP_SUMMARY"
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+        if: steps.token.outputs.ok == 'true'
+      - name: fly deploy
+        if: steps.token.outputs.ok == 'true'
+        run: flyctl deploy --remote-only

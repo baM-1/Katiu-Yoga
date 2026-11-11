@@ -33,6 +33,8 @@ def _sqlite_pragmas(dbapi_connection: Any, _record: Any) -> None:
     cursor.execute("PRAGMA foreign_keys=ON")
     cursor.execute("PRAGMA journal_mode=WAL")
     cursor.execute("PRAGMA synchronous=NORMAL")
+    # Espera hasta 5 s si otro proceso (Litestream) tiene el candado, en vez de fallar al momento.
+    cursor.execute("PRAGMA busy_timeout=5000")
     cursor.close()
 
 

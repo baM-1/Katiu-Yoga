@@ -1,0 +1,14 @@
+# Litestream copia cada cambio de SQLite a un bucket S3-compatible (Cloudflare R2).
+# Las credenciales llegan como secretos: LITESTREAM_ACCESS_KEY_ID y LITESTREAM_SECRET_ACCESS_KEY.
+dbs:
+  - path: /data/katiu.db
+    replicas:
+      - type: s3
+        bucket: ${LITESTREAM_BUCKET}
+        path: katiu.db
+        endpoint: ${LITESTREAM_ENDPOINT}
+        region: auto
+        force-path-style: true
+        # Instantánea completa cada día y se guardan 30 días de historial.
+        snapshot-interval: 24h
+        retention: 720h

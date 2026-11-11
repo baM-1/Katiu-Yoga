@@ -6,6 +6,18 @@ Versionado: [SemVer](https://semver.org/lang/es/).
 
 ## [Sin publicar]
 
+### Añadido (piloto)
+- **Despliegue en Fly.io** (Madrid): `Dockerfile` multietapa sin datos ni secretos, `fly.toml`
+  con health check en `/salud` y apagado automático. ADR-0006.
+- **Copia continua con Litestream** a Cloudflare R2 (UE) y restauración automática al arrancar
+  en un disco vacío (`deploy/start.sh`).
+- **Despliegue continuo** con GitHub Actions cuando la CI pasa en `main` (requiere
+  `FLY_API_TOKEN`).
+- Guía paso a paso en `docs/DEPLOY.md`.
+
+### Cambiado (piloto)
+- SQLite espera hasta 5 s al candado (`busy_timeout`) para convivir con Litestream.
+
 ### Cambiado
 - Tarifa especial **Grupo Reggio · clase suelta (21 €)** como plan activo. El resto de clases
   grupales siguen a 30 €.
