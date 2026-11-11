@@ -1,29 +1,47 @@
-/* Tokens de marca Katiu Yoga (Pautas de diseño 2026).
-   Única fuente de color, tipografía y forma: los componentes usan var(--token), nunca un hex suelto.
-   Los hex se han muestreado del manual de marca (sus códigos impresos no coinciden con los
-   colores reales; ver docs/adr/0002-identidad-de-marca.md). */
+/* Tokens de marca Katiu Yoga: paleta "Bosque & Lino" (refresh 2026-11, ADR-0002).
+   Única fuente de color, tipografía y forma. Hay dos capas:
+   1) colores de marca (--bosque, --terracota...) y
+   2) roles semánticos (--text, --accent, --ok...), que es lo ÚNICO que usan los componentes.
+   Todos los pares texto/fondo cumplen WCAG AA (≥ 4.5:1); los ratios están anotados. */
 :root {
-  /* Paleta de marca */
-  --bosque: #3D4A3B;      /* primario A: texto fuerte, navegación, logo */
-  --lino: #F3EEE4;        /* primario B: fondo */
-  --papel: #FAF8F4;       /* tarjetas (como en la lista de precios) */
-  --terracota: #CC6633;   /* primario C: acentos grandes, estrella, iconos */
-  --terracota-tinta: #A8501F; /* terracota oscurecida para texto y botones (AA 4.7:1 sobre lino) */
-  --oliva: #667059;       /* primario D: éxito / asistió, texto secundario */
-  --arena: #C8B296;       /* primario E: bordes, separadores, pendiente */
+  /* --- Marca --- */
+  --bosque: #34433A;          /* texto y navegación · 9.1:1 sobre lino */
+  --bosque-profundo: #26322B; /* titulares, barra inferior */
+  --lino: #F4EFE6;            /* fondo */
+  --papel: #FBF9F5;           /* tarjetas */
+  --terracota: #C8602E;       /* estrella, iconos, acentos grandes (no texto pequeño) */
+  --terracota-tinta: #A2461C; /* botón primario y enlaces · 5.4:1 */
+  --salvia: #5D6A50;          /* texto secundario, "asistió" · 5.0:1 */
+  --arena: #CDB896;           /* bordes y separadores (decorativo) */
+  --miel: #8A5F0C;            /* "pendiente de pago" · 4.9:1 */
+  --granada: #9E3B2E;         /* errores, deshacer · 5.9:1 */
 
-  /* Roles semánticos: la interfaz usa estos, no los de arriba */
+  /* Tintes para fondos de estado (texto bosque encima ≥ 7.6:1) */
+  --salvia-tinte: #E3E8DB;
+  --miel-tinte: #F6E4BC;
+  --terracota-tinte: #F5DCCD;
+  --granada-tinte: #F3D6D0;
+
+  /* --- Roles semánticos --- */
   --bg: var(--lino);
   --surface: var(--papel);
   --text: var(--bosque);
-  --text-muted: var(--oliva);
+  --text-strong: var(--bosque-profundo);
+  --text-muted: var(--salvia);
   --accent: var(--terracota);
   --accent-ink: var(--terracota-tinta);
+  --on-accent: var(--lino);
   --line: var(--arena);
+  --ok: var(--salvia);
+  --ok-bg: var(--salvia-tinte);
+  --warn: var(--miel);
+  --warn-bg: var(--miel-tinte);
+  --danger: var(--granada);
+  --danger-bg: var(--granada-tinte);
   --logo: var(--bosque);
 
   /* Tipografía: la marca usa Abril Text (de pago). Newsreader es el sustituto libre más cercano;
-     si Kat tiene licencia web de Abril Text, basta cambiar --font-display. */
+     con licencia web de Abril Text basta cambiar --font-display. */
   --font-display: "Newsreader", "Abril Text", Georgia, serif;
   --font-body: "Inter", system-ui, sans-serif;
 
@@ -34,16 +52,24 @@
   --space: 1rem;
 }
 
-/* Modo oscuro "bosque de noche" */
+/* Modo oscuro "bosque de noche" (todos los textos ≥ 5:1 sobre fondo y superficie) */
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #232B24;
-    --surface: #2E382F;
+    --bg: #1F2722;
+    --surface: #2A342D;
     --text: var(--lino);
-    --text-muted: #A3A99B;
-    --accent: #D6855C;
-    --accent-ink: #E0A385;
-    --line: #4A564A;
+    --text-strong: #FFFFFF;
+    --text-muted: #A9B59B;
+    --accent: #E3926A;
+    --accent-ink: #E3926A;
+    --on-accent: #1F2722;
+    --line: #4B5747;
+    --ok: #A9B59B;
+    --ok-bg: #34413A;
+    --warn: #E7BE6A;
+    --warn-bg: #3D3825;
+    --danger: #E8897A;
+    --danger-bg: #43302C;
     --logo: var(--lino);
   }
 }
