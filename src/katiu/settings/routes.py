@@ -50,6 +50,7 @@ def _schedule_page(
     *,
     message: str | None = None,
     error: str | None = None,
+    open_slot: int | None = None,
     status: int = 200,
 ) -> Response:
     return templates.TemplateResponse(
@@ -63,6 +64,7 @@ def _schedule_page(
             "today": clock.today(),
             "message": message,
             "error": error,
+            "open_slot": open_slot,
         },
         status_code=status,
     )
@@ -74,6 +76,7 @@ def schedule(request: Request, db: DbSession, user: CurrentUser, ok: str = "") -
         "franja": "¡Horario guardado! Las clases ya aparecen en Hoy. Om.",
         "pausa": "Horario pausado.",
         "extra": "¡Clase extra creada! Más esterillas, más prana.",
+        "cambio": "Horario cambiado. Las próximas clases ya salen con la hora nueva.",
     }
     return _schedule_page(request, db, message=messages.get(ok))
 
@@ -95,6 +98,26 @@ def add_slot(
     audit.record(db, user.id, AuditAction.SLOT_ADDED, AuditTarget.SLOT, slot.id)
     classes.generate_sessions(db, clock.today())
     return RedirectResponse("/ajustes/horario?ok=franja", status_code=303)
+
+
+@write.post("/ajustes/horario/{slot_id}")
+def change_slot(
+    request: Request,
+    db: DbSession,
+    user: CurrentUser,
+    slot_id: int,
+    weekday: Annotated[int, Form()],
+    start_time: Annotated[time, Form()],
+    duration_min: Annotated[int, Form()] = 60,
+) -> Response:
+    try:
+        slot = classes.change_slot(db, slot_id, weekday, start_time, duration_min, clock.today())
+    except classes.ClassError as exc:
+        db.rollback()
+        return _schedule_page(request, db, error=str(exc), open_slot=slot_id, status=422)
+    detail = f"{classes.WEEKDAYS[slot.weekday]} {slot.start_time:%H:%M}"
+    audit.record(db, user.id, AuditAction.SLOT_CHANGED, AuditTarget.SLOT, slot_id, detail)
+    return RedirectResponse("/ajustes/horario?ok=cambio", status_code=303)
 
 
 @write.post("/ajustes/horario/{slot_id}/pausar")
