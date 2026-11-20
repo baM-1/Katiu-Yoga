@@ -1,4 +1,4 @@
-{# Una persona en la lista. Variables: item (RosterItem), cls_id #}
+{# Una persona en la lista. Variables: item (RosterItem), cls_id, price_error (opcional) #}
 {% set s = item.student %}
 <li class="roster-item{% if item.attended %} is-on{% endif %}{% if item.paid %} is-paid{% endif %}"
     id="alumno-{{ s.id }}" data-name="{{ s.full_name }}">
@@ -9,7 +9,7 @@
           aria-pressed="{{ 'true' if item.attended else 'false' }}">
     <span class="avatar" aria-hidden="true">{% if item.attended %}{{ icon("check") }}{% else %}{{ initials(s.full_name) }}{% endif %}</span>
     <span>
-      <span class="roster-item__name">{{ s.full_name }}</span>
+      <span class="roster-item__name">{{ s.full_name }}{% if item.tariff_label %} <span class="pill pill--tariff">{{ item.tariff_label }}</span>{% endif %}</span>
       <span class="roster-item__hint">
         {%- if item.attended %}Vino · {{ eur(item.attendance.price_cents, decimals=false) }}
         {%- elif item.is_regular %}Habitual de esta hora
@@ -25,5 +25,18 @@
           aria-label="{{ 'Pagado. Toca para marcar como pendiente' if item.paid else 'Pendiente. Toca para marcar como pagado en efectivo' }}">
     {% if item.paid %}✓ Pagado{% else %}€ Pendiente{% endif %}
   </button>
+  {% if not item.paid %}
+  <details class="roster-item__price"{% if price_error %} open{% endif %}>
+    <summary>{{ eur(item.attendance.price_cents, decimals=false) }} ✎ <span>cambiar precio</span></summary>
+    <form class="price-form" hx-post="/clases/{{ cls_id }}/alumnos/{{ s.id }}/precio"
+          hx-target="#alumno-{{ s.id }}" hx-swap="outerHTML">
+      <label for="precio-{{ s.id }}">Precio solo para esta clase</label>
+      <input class="input" id="precio-{{ s.id }}" name="amount" inputmode="decimal" required
+             autocomplete="off" placeholder="p. ej. 15" value="{{ amount_input(item.attendance.price_cents) }}">
+      <button class="btn" type="submit">Guardar</button>
+      {% if price_error %}<p class="notice notice--error" role="alert">{{ price_error }}</p>{% endif %}
+    </form>
+  </details>
+  {% endif %}
   {% endif %}
 </li>

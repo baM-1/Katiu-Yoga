@@ -10,6 +10,7 @@ from katiu.audit import service as audit
 from katiu.audit.models import AuditAction, AuditTarget
 from katiu.classes.models import ClassSession, Plan
 from katiu.core import clock
+from katiu.core.money import format_eur
 from katiu.core.security import verify_csrf
 from katiu.core.templating import templates
 from katiu.core.web import CurrentUser, DbSession
@@ -52,7 +53,14 @@ def _when(cls: ClassSession) -> str:
     return f"{cls.date:%d/%m} {cls.start_time:%H:%M}"
 
 
-def _item_response(request: Request, db: DbSession, class_id: int, student_id: int) -> Response:
+def _item_response(
+    request: Request,
+    db: DbSession,
+    class_id: int,
+    student_id: int,
+    *,
+    price_error: str | None = None,
+) -> Response:
     """Devuelve la tarjeta actualizada + la barra de totales (fuera de banda, hx-swap-oob)."""
     return templates.TemplateResponse(
         request,
@@ -61,7 +69,9 @@ def _item_response(request: Request, db: DbSession, class_id: int, student_id: i
             "cls_id": class_id,
             "item": service.roster_item(db, class_id, student_id),
             "totals": service.totals(db, class_id),
+            "price_error": price_error,
         },
+        status_code=422 if price_error else 200,
     )
 
 
@@ -92,6 +102,30 @@ def toggle_paid(
         raise HTTPException(404, str(exc)) from exc
     detail = f"{_when(cls)} · {'pagado' if paid else 'deshecho'}"
     audit.record(db, user.id, AuditAction.PAYMENT_TOGGLED, AuditTarget.STUDENT, student_id, detail)
+    return _item_response(request, db, class_id, student_id)
+
+
+@write.post("/{class_id}/alumnos/{student_id}/precio", response_class=HTMLResponse)
+def override_price(
+    request: Request,
+    db: DbSession,
+    user: CurrentUser,
+    class_id: int,
+    student_id: int,
+    amount: Annotated[str, Form()],
+) -> Response:
+    """Excepción puntual: otro precio para esta asistencia (descuento, invitación…)."""
+    cls, _ = _class_or_404(db, class_id)
+    try:
+        before, after = service.override_price(db, class_id, student_id, amount)
+    except service.AttendanceError as exc:
+        try:
+            return _item_response(request, db, class_id, student_id, price_error=str(exc))
+        except service.AttendanceError as missing:
+            raise HTTPException(404, str(missing)) from missing
+    change = f"{format_eur(before, decimals=False)} → {format_eur(after, decimals=False)}"
+    detail = f"{_when(cls)} · {change}"
+    audit.record(db, user.id, AuditAction.PRICE_OVERRIDDEN, AuditTarget.STUDENT, student_id, detail)
     return _item_response(request, db, class_id, student_id)
 
 

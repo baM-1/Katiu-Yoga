@@ -89,6 +89,18 @@ a.card:active { transform: scale(.99); }
 .roster-item.is-on .roster-item__pay { color: var(--warn); border-left-color: rgb(0 0 0 / .06); }
 .roster-item.is-paid .roster-item__pay { color: var(--ok); }
 .roster-item[hidden] { display: none; }
+/* Etiqueta de tarifa (Reggio…) y precio editable solo para esta clase. */
+.pill--tariff { padding: .1rem .5rem; font-size: .72rem; vertical-align: middle; margin-left: .25rem; }
+.roster-item__price { grid-column: 1 / -1; border-top: 1px solid rgb(0 0 0 / .06); padding: 0 var(--space-3); }
+.roster-item__price summary {
+  cursor: pointer; padding: var(--space-2) 0; font-size: .85rem; font-weight: 600; color: var(--text-muted);
+  list-style: none;
+}
+.roster-item__price summary::-webkit-details-marker { display: none; }
+.roster-item__price summary span { font-weight: 400; }
+.price-form { display: grid; grid-template-columns: 1fr auto; gap: var(--space-2); padding-bottom: var(--space-3); align-items: end; }
+.price-form label { grid-column: 1 / -1; font-size: .85rem; }
+.price-form .notice { grid-column: 1 / -1; margin: 0; }
 /* Microinteracción "barrido de luz": al marcar, una franja de luz recorre la tarjeta (200 ms). */
 .roster-item.is-on::after {
   content: ""; position: absolute; inset: 0; pointer-events: none;
@@ -154,6 +166,10 @@ input[type="date"].input { appearance: none; -webkit-appearance: none; display: 
 .list-row__main b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .list-row__main span { color: var(--text-muted); font-size: .88rem; }
 .list-row svg { width: 20px; height: 20px; color: var(--text-muted); flex: none; }
+/* Tarifas: cada fila se despliega para editarla, sin el borde punteado de .disclosure. */
+.tariff .disclosure { border: 0; border-radius: 0; }
+.tariff .disclosure > summary { min-height: 64px; color: var(--text); font-weight: 400; }
+.tariff .disclosure > summary svg { color: var(--text-muted); }
 
 /* --- Ficha de alumno --- */
 .profile-head { display: flex; align-items: center; gap: var(--space-4); }

@@ -12,7 +12,7 @@ from jinja2 import ChoiceLoader, FileSystemLoader
 
 from katiu.core import clock
 from katiu.core.config import get_settings
-from katiu.core.money import format_eur
+from katiu.core.money import format_amount_input, format_eur
 from katiu.core.security import csrf_token
 from katiu.core.text import initials, whatsapp_url
 
@@ -53,6 +53,7 @@ templates.env.loader = ChoiceLoader(
     + [FileSystemLoader(PKG / m / "templates") for m in MODULES if (PKG / m / "templates").is_dir()]
 )
 templates.env.globals["eur"] = format_eur
+templates.env.globals["amount_input"] = format_amount_input
 templates.env.globals["human_date"] = human_date
 templates.env.globals["month_year"] = month_year
 templates.env.globals["is_dev"] = get_settings().is_dev

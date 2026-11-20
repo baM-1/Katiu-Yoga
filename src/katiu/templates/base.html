@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#FBF7EF" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0E2230" media="(prefers-color-scheme: dark)">
-  <meta name="htmx-config" content='{"includeIndicatorStyles": false, "defaultSwapStyle": "outerHTML"}'>
+  <meta name="htmx-config" content='{"includeIndicatorStyles": false, "defaultSwapStyle": "outerHTML", "responseHandling": [{"code": "204", "swap": false}, {"code": "[23]..", "swap": true}, {"code": "422", "swap": true}, {"code": "[45]..", "swap": false, "error": true}]}'>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Katiu Yoga">
   <title>{% block title %}Katiu Yoga{% endblock %}</title>

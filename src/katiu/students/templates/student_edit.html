@@ -37,14 +37,24 @@
     <input class="input" id="location" name="location" value="{{ val('location', s.location) }}">
   </div>
   <div class="field">
-    <label for="default_plan_id">Tarifa habitual</label>
+    <label for="default_plan_id">Tarifa de grupo</label>
     {% set current_plan = (f.default_plan_id if f else (s.default_plan_id | string if s.default_plan_id else "")) %}
     <select class="input" id="default_plan_id" name="default_plan_id">
-      <option value="">Sin tarifa fija</option>
-      {% for plan in plans %}
-      <option value="{{ plan.id }}"{% if plan.id | string == current_plan %} selected{% endif %}>{{ plan.name }} · {{ eur(plan.price_cents, decimals=false) }}</option>
-      {% endfor %}
+      <option value="">Sin tarifa fija (paga el precio de la clase)</option>
+      <optgroup label="Tarifas de grupo">
+        {% for plan in plans.group %}
+        <option value="{{ plan.id }}"{% if plan.id | string == current_plan %} selected{% endif %}>{{ plan.name }} · {{ eur(plan.price_cents, decimals=false) }}</option>
+        {% endfor %}
+      </optgroup>
+      {% if plans.other %}
+      <optgroup label="Otras (individual, bonos, antiguas)">
+        {% for plan in plans.other %}
+        <option value="{{ plan.id }}"{% if plan.id | string == current_plan %} selected{% endif %}>{{ plan.name }} · {{ eur(plan.price_cents, decimals=false) }}</option>
+        {% endfor %}
+      </optgroup>
+      {% endif %}
     </select>
+    <small>Es lo que se le cobra al marcarle en una clase de grupo. Los cambios valen de hoy en adelante.</small>
   </div>
 
   <div class="field">
