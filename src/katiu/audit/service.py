@@ -33,6 +33,10 @@ LABELS: dict[AuditAction, str] = {
     AuditAction.PLAN_CREATED: "creó una tarifa",
     AuditAction.PLAN_UPDATED: "cambió una tarifa",
     AuditAction.PLAN_ARCHIVED: "archivó una tarifa",
+    AuditAction.CLASS_CANCELLED: "canceló una clase",
+    AuditAction.CLASS_RESTORED: "reactivó una clase",
+    AuditAction.CLASS_MOVED: "movió una clase",
+    AuditAction.SLOT_CHANGED: "cambió un horario fijo",
 }
 
 

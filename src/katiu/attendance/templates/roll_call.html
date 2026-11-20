@@ -9,6 +9,19 @@
   </div>
 </header>
 
+{% if cls.notes and cls.notes.startswith("Movida") %}<p class="muted">{{ cls.notes }}</p>{% endif %}
+{% if error %}<p class="notice notice--error" role="alert">{{ error }}</p>{% endif %}
+
+{% if cls.cancelled %}
+<div class="empty">
+  <h2>Clase cancelada</h2>
+  <p>Hoy las esterillas descansan. No sale en Hoy como clase activa y no se puede pasar lista.</p>
+  <form method="post" action="/clases/{{ cls.id }}/reactivar" class="mt-4">
+    <input type="hidden" name="csrf_token" value="{{ csrf(request) }}">
+    <button class="btn" type="submit">{{ icon("check") }} Reactivar la clase</button>
+  </form>
+</div>
+{% else %}
 <div class="search mt-2">
   {{ icon("search") }}
   <label for="buscar" class="visually-hidden">Buscar alumno</label>
@@ -48,5 +61,32 @@
 </section>
 {% endif %}
 
+<details class="disclosure mt-6" id="opciones"{% if error %} open{% endif %}>
+  <summary>{{ icon("calendar") }} Cancelar o mover esta clase</summary>
+  <div class="disclosure__body">
+    {% if totals.people %}
+    <p class="muted">Hay {{ totals.people }} {{ "persona marcada" if totals.people == 1 else "personas marcadas" }}. Para cancelar o mover la clase, quítalas antes de la lista.</p>
+    {% else %}
+    <form method="post" action="/clases/{{ cls.id }}/cancelar" data-confirm="¿Cancelar la clase del {{ human_date(cls.date) }} a las {{ cls.start_time.strftime('%H:%M') }}?">
+      <input type="hidden" name="csrf_token" value="{{ csrf(request) }}">
+      <p class="muted">Solo esta vez. Tu horario fijo sigue igual.</p>
+      <button class="btn btn--ghost btn--block" type="submit">Cancelar solo esta clase</button>
+    </form>
+    <form method="post" action="/clases/{{ cls.id }}/mover" class="stack">
+      <input type="hidden" name="csrf_token" value="{{ csrf(request) }}">
+      <p class="muted">¿Cambia solo esta semana? Elige el nuevo día y hora. Tu horario fijo sigue igual.</p>
+      <div class="form-row">
+        <div class="field"><label for="move-day">Nuevo día</label>
+          <input class="input" id="move-day" name="day" type="date" required value="{{ cls.date.isoformat() }}"></div>
+        <div class="field"><label for="move-time">Nueva hora</label>
+          <input class="input" id="move-time" name="start_time" type="time" required value="{{ cls.start_time.strftime('%H:%M') }}"></div>
+      </div>
+      <button class="btn btn--block" type="submit">Mover esta clase</button>
+    </form>
+    {% endif %}
+  </div>
+</details>
+
 {% with oob=false %}{% include "_totals.html" %}{% endwith %}
+{% endif %}
 {% endblock %}

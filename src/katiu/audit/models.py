@@ -35,6 +35,10 @@ class AuditAction(StrEnum):
     PLAN_CREATED = "plan_created"
     PLAN_UPDATED = "plan_updated"
     PLAN_ARCHIVED = "plan_archived"
+    CLASS_CANCELLED = "class_cancelled"
+    CLASS_RESTORED = "class_restored"
+    CLASS_MOVED = "class_moved"
+    SLOT_CHANGED = "slot_changed"
 
 
 class AuditTarget(StrEnum):

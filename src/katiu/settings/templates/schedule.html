@@ -8,18 +8,36 @@
 
 <section class="section">
   <h2>Clases fijas</h2>
-  <p class="muted">Cada semana se crean solas. No hace falta tocarlas.</p>
+  <p class="muted">Cada semana se crean solas. ¿Un día no hay clase? Ábrela en Hoy y toca «Cancelar o mover esta clase».</p>
   {% if slots %}
   <ul class="list mt-4" role="list">
     {% for slot, plan in slots %}
-    <li class="list-row">
-      {{ icon("clock") }}
-      <span class="list-row__main"><b>{{ weekdays[slot.weekday] | capitalize }} · {{ slot.start_time.strftime("%H:%M") }}</b>
-        <span>{{ plan.name.split(" · ")[0] }} · {{ slot.duration_min }} min · {{ eur(plan.price_cents, decimals=false) }}</span></span>
-      <form method="post" action="/ajustes/horario/{{ slot.id }}/pausar" data-confirm="¿Pausar este horario? Las próximas clases vacías desaparecerán de Hoy.">
-        <input type="hidden" name="csrf_token" value="{{ csrf(request) }}">
-        <button class="btn btn--ghost" type="submit" aria-label="Pausar {{ weekdays[slot.weekday] }} {{ slot.start_time.strftime('%H:%M') }}">{{ icon("pause") }}</button>
-      </form>
+    <li>
+      <div class="list-row">
+        {{ icon("clock") }}
+        <span class="list-row__main"><b>{{ weekdays[slot.weekday] | capitalize }} · {{ slot.start_time.strftime("%H:%M") }}</b>
+          <span>{{ plan.name.split(" · ")[0] }} · {{ slot.duration_min }} min · {{ eur(plan.price_cents, decimals=false) }}</span></span>
+        <form method="post" action="/ajustes/horario/{{ slot.id }}/pausar" data-confirm="¿Pausar este horario? Las próximas clases vacías desaparecerán de Hoy.">
+          <input type="hidden" name="csrf_token" value="{{ csrf(request) }}">
+          <button class="btn btn--ghost" type="submit" aria-label="Pausar {{ weekdays[slot.weekday] }} {{ slot.start_time.strftime('%H:%M') }}">{{ icon("pause") }}</button>
+        </form>
+      </div>
+      <details class="slot-change"{% if open_slot == slot.id %} open{% endif %}>
+        <summary>{{ icon("edit") }} Cambiar día u hora</summary>
+        <form class="disclosure__body" method="post" action="/ajustes/horario/{{ slot.id }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf(request) }}">
+          <div class="form-row">
+            <div class="field"><label for="w-{{ slot.id }}">Día</label>
+              <select class="input" id="w-{{ slot.id }}" name="weekday">{% for d in weekdays %}<option value="{{ loop.index0 }}"{% if loop.index0 == slot.weekday %} selected{% endif %}>{{ d | capitalize }}</option>{% endfor %}</select></div>
+            <div class="field"><label for="t-{{ slot.id }}">Hora</label>
+              <input class="input" id="t-{{ slot.id }}" name="start_time" type="time" required value="{{ slot.start_time.strftime('%H:%M') }}"></div>
+          </div>
+          <div class="field"><label for="d-{{ slot.id }}">Minutos</label>
+            <input class="input" id="d-{{ slot.id }}" name="duration_min" type="number" min="15" step="15" value="{{ slot.duration_min }}"></div>
+          <p class="muted">Vale de hoy en adelante. Las clases que ya tienen gente marcada no se mueven.</p>
+          <button class="btn" type="submit">{{ icon("check") }} Guardar cambio</button>
+        </form>
+      </details>
     </li>
     {% endfor %}
   </ul>
