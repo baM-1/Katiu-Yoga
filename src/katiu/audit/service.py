@@ -8,7 +8,7 @@ from sqlmodel import Session, col, func, select
 
 from katiu.accounts.models import User
 from katiu.audit.models import AuditAction, AuditEvent, AuditTarget
-from katiu.classes.models import ClassSession
+from katiu.classes.models import ClassSession, Plan
 from katiu.students.models import Student
 
 LABELS: dict[AuditAction, str] = {
@@ -29,6 +29,10 @@ LABELS: dict[AuditAction, str] = {
     AuditAction.USER_ACTIVATED: "activó un usuario",
     AuditAction.USER_DEACTIVATED: "desactivó un usuario",
     AuditAction.EXPORT_DOWNLOADED: "descargó el Excel",
+    AuditAction.PRICE_OVERRIDDEN: "cambió el precio de una clase",
+    AuditAction.PLAN_CREATED: "creó una tarifa",
+    AuditAction.PLAN_UPDATED: "cambió una tarifa",
+    AuditAction.PLAN_ARCHIVED: "archivó una tarifa",
 }
 
 
@@ -80,6 +84,9 @@ def _target(
     if kind == AuditTarget.USER:
         user = session.get(User, target_id)
         return (user.display_name if user else f"usuario #{target_id}"), None
+    if kind == AuditTarget.PLAN:
+        plan = session.get(Plan, target_id)
+        return (plan.name if plan else f"tarifa #{target_id}"), "/ajustes/tarifas"
     return f"horario #{target_id}", "/ajustes/horario"
 
 

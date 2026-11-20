@@ -11,8 +11,10 @@ from katiu.accounts.service import AccountError, change_password
 from katiu.audit import service as audit
 from katiu.audit.models import AuditAction, AuditTarget
 from katiu.classes import service as classes
-from katiu.classes.models import Plan, PlanKind
+from katiu.classes import tariffs
+from katiu.classes.models import Modality, Plan, PlanFormat, PlanKind
 from katiu.core import clock
+from katiu.core.money import format_eur
 from katiu.core.security import verify_csrf
 from katiu.core.templating import templates
 from katiu.core.web import CurrentUser, DbSession
@@ -121,6 +123,91 @@ def extra_class(
         return _schedule_page(request, db, error=str(exc), status=422)
     audit.record(db, user.id, AuditAction.EXTRA_CLASS, AuditTarget.CLASS, cls.id)
     return RedirectResponse(f"/clases/{cls.id}", status_code=303)
+
+
+def _tariffs_page(
+    request: Request,
+    db: DbSession,
+    *,
+    message: str | None = None,
+    error: str | None = None,
+    form: dict[str, str] | None = None,
+    open_id: int | None = None,
+    status: int = 200,
+) -> Response:
+    return templates.TemplateResponse(
+        request,
+        "tariffs.html",
+        {
+            "section": "mas",
+            "rows": tariffs.tariff_list(db),
+            "message": message,
+            "error": error,
+            "form": form,
+            "open_id": open_id,
+        },
+        status_code=status,
+    )
+
+
+@router.get("/ajustes/tarifas", response_class=HTMLResponse)
+def tariff_list(request: Request, db: DbSession, user: CurrentUser, ok: str = "") -> Response:
+    messages = {
+        "nueva": "¡Tarifa creada! Ya la puedes asignar en la ficha de cada alumno.",
+        "guardada": "Tarifa guardada. El precio nuevo vale para lo que marques desde ahora.",
+        "archivada": "Tarifa archivada. Namasté y hasta luego.",
+    }
+    return _tariffs_page(request, db, message=messages.get(ok))
+
+
+@write.post("/ajustes/tarifas", response_class=HTMLResponse)
+def tariff_create(
+    request: Request,
+    db: DbSession,
+    user: CurrentUser,
+    name: Annotated[str, Form()],
+    price: Annotated[str, Form()],
+    format: Annotated[PlanFormat, Form()] = PlanFormat.GROUP,
+    modality: Annotated[Modality, Form()] = Modality.IN_PERSON,
+) -> Response:
+    try:
+        plan = tariffs.create_tariff(db, name, price, format, modality)
+    except tariffs.TariffError as exc:
+        form = {"name": name, "price": price, "format": format, "modality": modality}
+        return _tariffs_page(request, db, error=str(exc), form=form, status=422)
+    detail = format_eur(plan.price_cents, decimals=False)
+    audit.record(db, user.id, AuditAction.PLAN_CREATED, AuditTarget.PLAN, plan.id, detail)
+    return RedirectResponse("/ajustes/tarifas?ok=nueva", status_code=303)
+
+
+@write.post("/ajustes/tarifas/{plan_id}", response_class=HTMLResponse)
+def tariff_update(
+    request: Request,
+    db: DbSession,
+    user: CurrentUser,
+    plan_id: int,
+    name: Annotated[str, Form()],
+    price: Annotated[str, Form()],
+) -> Response:
+    try:
+        plan, before = tariffs.update_tariff(db, plan_id, name, price)
+    except tariffs.TariffError as exc:
+        db.rollback()
+        return _tariffs_page(request, db, error=str(exc), open_id=plan_id, status=422)
+    after = plan.price_cents
+    detail = f"{format_eur(before, decimals=False)} → {format_eur(after, decimals=False)}"
+    audit.record(db, user.id, AuditAction.PLAN_UPDATED, AuditTarget.PLAN, plan_id, detail)
+    return RedirectResponse("/ajustes/tarifas?ok=guardada", status_code=303)
+
+
+@write.post("/ajustes/tarifas/{plan_id}/archivar", response_class=HTMLResponse)
+def tariff_archive(request: Request, db: DbSession, user: CurrentUser, plan_id: int) -> Response:
+    try:
+        tariffs.archive_tariff(db, plan_id)
+    except tariffs.TariffError as exc:
+        return _tariffs_page(request, db, error=str(exc), status=422)
+    audit.record(db, user.id, AuditAction.PLAN_ARCHIVED, AuditTarget.PLAN, plan_id)
+    return RedirectResponse("/ajustes/tarifas?ok=archivada", status_code=303)
 
 
 @router.get("/ajustes/contrasena", response_class=HTMLResponse)
