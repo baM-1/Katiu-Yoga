@@ -31,6 +31,10 @@ class AuditAction(StrEnum):
     USER_ACTIVATED = "user_activated"
     USER_DEACTIVATED = "user_deactivated"
     EXPORT_DOWNLOADED = "export_downloaded"
+    PRICE_OVERRIDDEN = "price_overridden"
+    PLAN_CREATED = "plan_created"
+    PLAN_UPDATED = "plan_updated"
+    PLAN_ARCHIVED = "plan_archived"
 
 
 class AuditTarget(StrEnum):
@@ -38,6 +42,7 @@ class AuditTarget(StrEnum):
     CLASS = "class"
     SLOT = "slot"
     USER = "user"
+    PLAN = "plan"
 
 
 class AuditEvent(SQLModel, table=True):

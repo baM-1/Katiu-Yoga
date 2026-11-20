@@ -3,6 +3,7 @@
 <header class="page-head"><div><p class="eyebrow">{{ user.display_name }}</p><h1>Más</h1></div></header>
 <ul class="list" role="list">
   <li><a class="list-row" href="/ajustes/horario">{{ icon("calendar") }}<span class="list-row__main"><b>Horario y clases extra</b><span>Tus clases fijas de cada semana</span></span>{{ icon("chevron") }}</a></li>
+  <li><a class="list-row" href="/ajustes/tarifas">{{ icon("wallet") }}<span class="list-row__main"><b>Tarifas</b><span>Precios de grupo (Normal, Reggio…) e individuales</span></span>{{ icon("chevron") }}</a></li>
   <li><a class="list-row" href="/ajustes/contrasena">{{ icon("lock") }}<span class="list-row__main"><b>Contraseña</b><span>Cambiar la contraseña de acceso</span></span>{{ icon("chevron") }}</a></li>
   {% if user.is_admin %}<li><a class="list-row" href="/admin">{{ icon("shield") }}<span class="list-row__main"><b>Panel de Admin</b><span>Usuarios, actividad, copias y Excel</span></span>{{ icon("chevron") }}</a></li>{% endif %}
   {% if is_dev %}<li><a class="list-row" href="/_estilo">{{ icon("star") }}<span class="list-row__main"><b>Sistema de diseño</b><span>Solo en desarrollo</span></span>{{ icon("chevron") }}</a></li>{% endif %}

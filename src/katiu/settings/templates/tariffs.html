@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Tarifas · Katiu Yoga{% endblock %}
+{% block content %}
+<a href="/mas" class="back" aria-label="Volver">{{ icon("back") }}</a>
+<header class="page-head"><div><p class="eyebrow">Ajustes</p><h1>Tarifas</h1></div></header>
+{% if message %}<p class="notice" role="status">{{ message }}</p>{% endif %}
+{% if error %}<p class="notice notice--error" role="alert">{{ error }}</p>{% endif %}
+
+<p class="muted">Lo que se cobra al marcar a alguien en una clase. Si cambias un precio, vale para lo que marques <b>a partir de ahora</b>: lo ya apuntado no se toca.</p>
+
+{% for group_label, fmt in [("Grupo", "group"), ("Individual", "individual")] %}
+{% set group_rows = rows | selectattr("plan.format", "equalto", fmt) | list %}
+{% if group_rows %}
+<section class="section">
+  <h2>{{ group_label }}</h2>
+  <ul class="list mt-4" role="list">
+    {% for r in group_rows %}
+    <li class="tariff">
+      <details class="disclosure"{% if open_id == r.plan.id %} open{% endif %}>
+        <summary>
+          <span class="list-row__main"><b>{{ r.plan.name }}</b>
+            <span>{{ eur(r.plan.price_cents, decimals=false) }}{% if r.plan.kind == "pack" %} · bono{% endif %} · {{ r.students }} alumno{{ "" if r.students == 1 else "s" }}{% if r.is_normal %} · la de los alumnos nuevos{% endif %}</span></span>
+          {{ icon("edit") }}
+        </summary>
+        <form class="disclosure__body" method="post" action="/ajustes/tarifas/{{ r.plan.id }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf(request) }}">
+          <div class="field"><label for="name-{{ r.plan.id }}">Nombre</label>
+            <input class="input" id="name-{{ r.plan.id }}" name="name" required maxlength="80" value="{{ r.plan.name }}"{% if r.is_normal %} readonly{% endif %}></div>
+          <div class="field"><label for="price-{{ r.plan.id }}">Precio (€)</label>
+            <input class="input" id="price-{{ r.plan.id }}" name="price" inputmode="decimal" required value="{{ amount_input(r.plan.price_cents) }}"></div>
+          <button class="btn" type="submit">{{ icon("check") }} Guardar</button>
+        </form>
+        {% if not r.is_normal %}
+        <form class="disclosure__body" method="post" action="/ajustes/tarifas/{{ r.plan.id }}/archivar"
+              data-confirm="¿Archivar «{{ r.plan.name }}»? Deja de salir en las listas; lo ya cobrado no cambia.">
+          <input type="hidden" name="csrf_token" value="{{ csrf(request) }}">
+          <button class="btn btn--ghost" type="submit">Archivar</button>
+        </form>
+        {% endif %}
+      </details>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+{% endfor %}
+
+<section class="section">
+  <details class="disclosure"{% if form %} open{% endif %}>
+    <summary>{{ icon("plus") }} Nueva tarifa</summary>
+    <form class="disclosure__body" method="post" action="/ajustes/tarifas">
+      <input type="hidden" name="csrf_token" value="{{ csrf(request) }}">
+      <div class="field"><label for="new-name">Nombre</label>
+        <input class="input" id="new-name" name="name" required maxlength="80" placeholder="p. ej. Grupo Amigas · clase suelta" value="{{ form.name if form else '' }}"></div>
+      <div class="form-row">
+        <div class="field"><label for="new-price">Precio (€)</label>
+          <input class="input" id="new-price" name="price" inputmode="decimal" required placeholder="25" value="{{ form.price if form else '' }}"></div>
+        <div class="field"><label for="new-format">Tipo</label>
+          <select class="input" id="new-format" name="format">
+            <option value="group"{% if form and form.format == "group" %} selected{% endif %}>Grupo</option>
+            <option value="individual"{% if form and form.format == "individual" %} selected{% endif %}>Individual</option>
+          </select></div>
+      </div>
+      <div class="field"><label for="new-modality">Modalidad</label>
+        <select class="input" id="new-modality" name="modality">
+          <option value="in_person">Presencial</option>
+          <option value="online"{% if form and form.modality == "online" %} selected{% endif %}>Online</option>
+        </select></div>
+      <p class="muted">Es una tarifa de clase suelta. Los bonos llegarán con la sección Dinero.</p>
+      <button class="btn" type="submit">Crear tarifa</button>
+    </form>
+  </details>
+</section>
+{% endblock %}

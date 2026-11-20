@@ -9,6 +9,8 @@ from decimal import ROUND_HALF_UP, Decimal, InvalidOperation
 
 Cents = int
 
+MAX_CLASS_PRICE_CENTS: Cents = 99_900  # 999 €: más en una sola clase es casi seguro un error
+
 
 def to_cents(value: int | float | str | Decimal) -> Cents:
     """Convierte euros (21, 21.0, "21,50", Decimal("21.5")) a céntimos (2100, 2150).
@@ -35,3 +37,9 @@ def format_eur(cents: Cents, *, decimals: bool = True) -> str:
     if decimals or cent:
         return f"{sign}{whole},{cent:02d} €"
     return f"{sign}{whole} €"
+
+
+def format_amount_input(cents: Cents) -> str:
+    """Para rellenar un campo de importe: 2100 → "21" · 2150 → "21,50" (sin € ni miles)."""
+    euros, cent = divmod(cents, 100)
+    return f"{euros},{cent:02d}" if cent else str(euros)

@@ -7,7 +7,8 @@ from datetime import date
 from sqlmodel import Session, col, select
 
 from katiu.attendance.models import Attendance
-from katiu.classes.models import ClassSession, Plan
+from katiu.classes.models import ClassSession, Plan, PlanFormat, PlanKind
+from katiu.classes.tariffs import normal_plan
 from katiu.core import clock
 from katiu.importing.cleaning import clean_email, clean_name, clean_text, normalize_phone
 from katiu.payments.service import balance_cents
@@ -46,6 +47,9 @@ def create_student(
     phone_e164, issue = normalize_phone(phone)
     if issue:
         raise StudentError("Ese teléfono no parece válido. Escríbelo con prefijo, p. ej. +34…")
+    if default_plan_id is None:  # todo alumno nuevo empieza con la tarifa normal de grupo
+        normal = normal_plan(session)
+        default_plan_id = normal.id if normal else None
     student = StudentRepository(session).add(
         Student(
             full_name=name,
@@ -119,10 +123,21 @@ def update_student(session: Session, student_id: int, changes: StudentChanges) -
     return student
 
 
-def plan_choices(session: Session, current_id: int | None = None) -> Sequence[Plan]:
+@dataclass(frozen=True)
+class PlanChoices:
+    """El desplegable de la ficha: primero las tarifas de grupo, luego el resto."""
+
+    group: list[Plan]
+    other: list[Plan]
+
+
+def plan_choices(session: Session, current_id: int | None = None) -> PlanChoices:
     """Tarifas activas para el desplegable (y la actual aunque esté retirada)."""
     stmt = select(Plan).where(col(Plan.active) | (col(Plan.id) == current_id))
-    return session.exec(stmt.order_by(col(Plan.name))).all()
+    plans = session.exec(stmt.order_by(col(Plan.name))).all()
+    group = [p for p in plans if p.kind == PlanKind.DROP_IN and p.format == PlanFormat.GROUP]
+    group.sort(key=lambda p: (-p.price_cents, p.name))
+    return PlanChoices(group=group, other=[p for p in plans if p not in group])
 
 
 def search(

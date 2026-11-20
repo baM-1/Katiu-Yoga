@@ -10,6 +10,10 @@ from katiu.classes.models import Modality, PlanFormat, PlanKind
 PACK_VALIDITY_DAYS = 60  # "Cada paquete tiene una vigencia de 60 días naturales desde el pago"
 LATE_CANCEL_HOURS = 2  # "Cancelaciones con al menos 2 horas de antelación"
 
+# Las dos tarifas de grupo de hoy. La normal es la de todo alumno nuevo (decisión 2026-11-20).
+NORMAL_GROUP_PLAN = "Grupal presencial · clase suelta"
+REGGIO_GROUP_PLAN = "Grupo Reggio · clase suelta"
+
 
 @dataclass(frozen=True)
 class PlanSeed:
@@ -39,7 +43,7 @@ TARIFAS_2026: list[PlanSeed] = [
     *_family("Grupal presencial", PlanFormat.GROUP, Modality.IN_PERSON, 3000, 10800, 20000),
     # Tarifa especial vigente (confirmada por Lalo, 2026-11-11): solo para el grupo Reggio.
     PlanSeed(
-        "Grupo Reggio · clase suelta",
+        REGGIO_GROUP_PLAN,
         PlanFormat.GROUP,
         Modality.IN_PERSON,
         PlanKind.DROP_IN,

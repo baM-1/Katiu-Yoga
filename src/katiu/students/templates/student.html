@@ -7,7 +7,7 @@
   <span class="avatar" aria-hidden="true">{{ initials(s.full_name) }}</span>
   <div>
     <h1>{{ s.full_name }}</h1>
-    <p class="muted">{% if s.active %}Activo{% else %}Inactivo{% endif %}{% if p.plan %} · {{ p.plan.name }}{% endif %}</p>
+    <p class="muted">{% if s.active %}Activo{% else %}Inactivo{% endif %}{% if p.plan %} · Tarifa: {{ p.plan.name }} ({{ eur(p.plan.price_cents, decimals=false) }}){% endif %}</p>
   </div>
 </header>
 
