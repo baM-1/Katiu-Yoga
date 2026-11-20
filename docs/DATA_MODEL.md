@@ -78,6 +78,11 @@ erDiagram
 ## Reglas
 - **Dinero en céntimos (`int`)**. Nunca `float`. Ver `core/money.py` y [ADR-0003](adr/0003-modelo-de-datos.md).
 - **Los precios se copian** (plan → clase → asistencia). Cambiar una tarifa no reescribe el pasado.
+- **Manda la tarifa del alumno** ([ADR-0008](adr/0008-tarifa-por-alumno.md)). Al marcar a alguien
+  en una clase de grupo, si su `default_plan_id` es una tarifa de grupo de clase suelta (Normal,
+  Reggio…), se cobra su precio actual; si no (sin tarifa, bono, individual), el de la clase.
+  Ver `attendance/service.price_for`. Kat puede sobrescribir el precio de una asistencia pendiente.
+- **Alumno nuevo = tarifa Normal** (`Grupal presencial · clase suelta`).
 - **Lo derivado no se guarda.** Saldo = Σ asistencias − Σ pagos (o clases que le quedan del bono).
   Se calcula en `payments/service.py` (Fase 3).
 - **`legacy_id`** guarda el ID del Excel (`ALU-0001`, `CLA-0001`, `REG-0001`, `PLA-01`). Es lo

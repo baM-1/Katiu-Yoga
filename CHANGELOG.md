@@ -6,6 +6,20 @@ Versionado: [SemVer](https://semver.org/lang/es/).
 
 ## [Sin publicar]
 
+### Corregido (tarifa por alumno)
+- **Al pasar lista se cobraba el precio de la clase, no la tarifa del alumno.** Ahora manda la
+  tarifa de grupo de cada alumno (Reggio 21 €, Normal 30 €…). Solo hacia adelante. ADR-0008.
+- Los errores de formularios HTMX (422) ya se muestran en pantalla (htmx 2 no los pintaba).
+
+### Añadido (tarifa por alumno)
+- **Más → Tarifas:** crear, cambiar nombre/precio y archivar tarifas desde la app.
+- **Precio puntual** en Pasar lista ("cambiar precio") mientras la clase está pendiente.
+- Etiqueta de tarifa (p. ej. "Grupo Reggio") en la tarjeta de Pasar lista.
+- Ficha: el campo pasa a llamarse **Tarifa de grupo** y ofrece primero las de grupo.
+- Alumno nuevo → tarifa Normal por defecto.
+- Migración `7c1d2e3f4a5b`: 7 alumnos del Excel pasan a "Grupo Reggio · clase suelta" y los que
+  no tenían tarifa, a Normal. Nuevas acciones de auditoría de precios y tarifas.
+
 ### Añadido (Panel de Admin)
 - **Panel de Admin** en `/admin`, solo para usuarios con `is_admin` (los demás ven un 404).
   Se llega desde Más → Panel de Admin. ADR-0007.
