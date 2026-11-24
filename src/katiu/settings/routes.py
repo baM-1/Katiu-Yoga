@@ -39,11 +39,6 @@ def more(request: Request, user: CurrentUser) -> Response:
     return templates.TemplateResponse(request, "more.html", {"section": "mas", "user": user})
 
 
-@router.get("/dinero", response_class=HTMLResponse)
-def money(request: Request, user: CurrentUser) -> Response:
-    return templates.TemplateResponse(request, "money_soon.html", {"section": "dinero"})
-
-
 def _schedule_page(
     request: Request,
     db: DbSession,
