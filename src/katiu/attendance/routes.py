@@ -1,13 +1,15 @@
 """Pasar lista: la pantalla más importante de la app."""
 
+from datetime import date, time
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Form, HTTPException, Request
-from fastapi.responses import HTMLResponse, Response
+from fastapi.responses import HTMLResponse, RedirectResponse, Response
 
 from katiu.attendance import service
 from katiu.audit import service as audit
 from katiu.audit.models import AuditAction, AuditTarget
+from katiu.classes import service as classes
 from katiu.classes.models import ClassSession, Plan
 from katiu.core import clock
 from katiu.core.money import format_eur
@@ -31,6 +33,12 @@ def _class_or_404(db: DbSession, class_id: int) -> tuple[ClassSession, Plan]:
 
 @router.get("/{class_id}", response_class=HTMLResponse)
 def roll_call(request: Request, db: DbSession, user: CurrentUser, class_id: int) -> Response:
+    return _roll_call_page(request, db, class_id)
+
+
+def _roll_call_page(
+    request: Request, db: DbSession, class_id: int, *, error: str | None = None
+) -> Response:
     cls, plan = _class_or_404(db, class_id)
     items = service.roster(db, class_id)
     regulars = [i for i in items if i.is_regular or i.attended]
@@ -45,7 +53,9 @@ def roll_call(request: Request, db: DbSession, user: CurrentUser, class_id: int)
             "regulars": regulars,
             "others": others,
             "totals": service.totals(db, class_id),
+            "error": error,
         },
+        status_code=422 if error else 200,
     )
 
 
@@ -105,6 +115,48 @@ def toggle_paid(
     return _item_response(request, db, class_id, student_id)
 
 
+@write.post("/{class_id}/cancelar", response_class=HTMLResponse)
+def cancel_class(request: Request, db: DbSession, user: CurrentUser, class_id: int) -> Response:
+    cls, _ = _class_or_404(db, class_id)
+    try:
+        classes.cancel_class(db, class_id)
+    except classes.ClassError as exc:
+        return _roll_call_page(request, db, class_id, error=str(exc))
+    audit.record(db, user.id, AuditAction.CLASS_CANCELLED, AuditTarget.CLASS, class_id, _when(cls))
+    return RedirectResponse(f"/clases/{class_id}", status_code=303)
+
+
+@write.post("/{class_id}/reactivar", response_class=HTMLResponse)
+def restore_class(request: Request, db: DbSession, user: CurrentUser, class_id: int) -> Response:
+    cls, _ = _class_or_404(db, class_id)
+    try:
+        classes.restore_class(db, class_id)
+    except classes.ClassError as exc:
+        return _roll_call_page(request, db, class_id, error=str(exc))
+    audit.record(db, user.id, AuditAction.CLASS_RESTORED, AuditTarget.CLASS, class_id, _when(cls))
+    return RedirectResponse(f"/clases/{class_id}", status_code=303)
+
+
+@write.post("/{class_id}/mover", response_class=HTMLResponse)
+def move_class(
+    request: Request,
+    db: DbSession,
+    user: CurrentUser,
+    class_id: int,
+    day: Annotated[date, Form()],
+    start_time: Annotated[time, Form()],
+) -> Response:
+    cls, _ = _class_or_404(db, class_id)
+    before = _when(cls)
+    try:
+        moved = classes.move_class(db, class_id, day, start_time)
+    except classes.ClassError as exc:
+        return _roll_call_page(request, db, class_id, error=str(exc))
+    detail = f"{before} → {_when(moved)}"
+    audit.record(db, user.id, AuditAction.CLASS_MOVED, AuditTarget.CLASS, moved.id, detail)
+    return RedirectResponse(f"/clases/{moved.id}", status_code=303)
+
+
 @write.post("/{class_id}/alumnos/{student_id}/precio", response_class=HTMLResponse)
 def override_price(
     request: Request,
@@ -141,7 +193,7 @@ def quick_add(
     cls, _ = _class_or_404(db, class_id)
     try:
         student = service.quick_add(db, class_id, full_name, phone or None)
-    except StudentError as exc:
+    except (StudentError, service.AttendanceError) as exc:
         return templates.TemplateResponse(
             request,
             "_form_error.html",

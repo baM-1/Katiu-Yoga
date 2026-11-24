@@ -10,7 +10,12 @@
 {% include "partials/divider.html" %}
 
 {% if todays %}
-  <p class="lede">{{ "Hoy tienes una clase" if todays | length == 1 else "Hoy tienes " ~ (todays | length) ~ " clases" }}. Que fluya el prana.</p>
+  {% set live = todays | rejectattr("session.cancelled") | list %}
+  {% if live %}
+  <p class="lede">{{ "Hoy tienes una clase" if live | length == 1 else "Hoy tienes " ~ (live | length) ~ " clases" }}. Que fluya el prana.</p>
+  {% else %}
+  <p class="lede">La clase de hoy está cancelada. Savasana oficial.</p>
+  {% endif %}
   <div class="stack mt-4">
     {% for card in todays %}{% with is_today=true %}{% include "_class_card.html" %}{% endwith %}{% endfor %}
   </div>

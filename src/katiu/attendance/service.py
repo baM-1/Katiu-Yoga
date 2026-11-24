@@ -142,10 +142,17 @@ def roster_item(session: Session, class_session_id: int, student_id: int) -> Ros
     raise AttendanceError("Ese alumno no está en la lista.")
 
 
+def _open_class(session: Session, class_session_id: int) -> ClassSession:
+    cls = _get_class(session, class_session_id)
+    if cls.cancelled:
+        raise AttendanceError("Esta clase está cancelada. Reactívala para pasar lista.")
+    return cls
+
+
 def toggle_attendance(session: Session, class_session_id: int, student_id: int) -> bool:
     """Marca o desmarca. Desmarcar borra también su pago de esa clase (la interfaz pide
     confirmación antes si estaba pagada). Devuelve True si queda marcado."""
-    cls = _get_class(session, class_session_id)
+    cls = _open_class(session, class_session_id)
     student = session.get(Student, student_id)
     if student is None:
         raise AttendanceError("Ese alumno no existe.")
@@ -245,7 +252,7 @@ def quick_add(
     session: Session, class_session_id: int, full_name: str, phone: str | None
 ) -> Student:
     """Alta rápida desde la lista: crea al alumno con el plan de la clase y lo marca."""
-    cls = _get_class(session, class_session_id)
+    cls = _open_class(session, class_session_id)
     student = create_student(session, full_name, phone, default_plan_id=cls.plan_id)
     toggle_attendance(session, class_session_id, student.id or 0)
     return student

@@ -58,6 +58,8 @@ a.card:active { transform: scale(.99); }
 .class-card__meta { color: var(--text-muted); font-size: .9rem; }
 .class-card__go { color: var(--accent-ink); }
 .class-card--today { border: 2px solid var(--accent); }
+.class-card--cancelled { opacity: .6; }
+.class-card--cancelled .class-card__time { text-decoration: line-through; }
 
 /* --- Avatar de iniciales --- */
 .avatar {
@@ -166,6 +168,14 @@ input[type="date"].input { appearance: none; -webkit-appearance: none; display: 
 .list-row__main b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .list-row__main span { color: var(--text-muted); font-size: .88rem; }
 .list-row svg { width: 20px; height: 20px; color: var(--text-muted); flex: none; }
+/* Horario: "Cambiar día u hora" bajo cada clase fija. */
+.slot-change > summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; gap: var(--space-2);
+  padding: 0 var(--space-4) var(--space-3) calc(var(--space-4) + 20px + var(--space-3));
+  font-size: .88rem; font-weight: 600; color: var(--accent-ink);
+}
+.slot-change > summary::-webkit-details-marker { display: none; }
+.slot-change > summary svg { width: 16px; height: 16px; }
 /* Tarifas: cada fila se despliega para editarla, sin el borde punteado de .disclosure. */
 .tariff .disclosure { border: 0; border-radius: 0; }
 .tariff .disclosure > summary { min-height: 64px; color: var(--text); font-weight: 400; }

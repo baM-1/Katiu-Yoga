@@ -67,4 +67,6 @@ class ClassSession(SQLModel, table=True):
     location: str | None = Field(default=None, max_length=80)
     notes: str | None = None
     schedule_slot_id: int | None = Field(default=None, foreign_key="schedule_slots.id")
+    # Cancelada: no se borra, porque el horario la volvería a crear sola (ADR-0009).
+    cancelled: bool = Field(default=False, sa_column_kwargs={"server_default": "0"})
     legacy_id: str | None = Field(default=None, index=True, unique=True, max_length=20)

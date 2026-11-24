@@ -6,6 +6,13 @@ Versionado: [SemVer](https://semver.org/lang/es/).
 
 ## [Sin publicar]
 
+### Añadido (cambios de horario)
+- **Cancelar una clase concreta** desde Pasar lista ("Cancelar o mover esta clase"). Se marca
+  como cancelada (no se borra), sale tachada en Hoy y se puede reactivar. ADR-0009.
+- **Mover una clase solo esa semana** a otro día u hora. El horario fijo no cambia.
+- **Cambiar día u hora de una clase fija** en Más → Horario. Vale de hoy en adelante.
+- Migración `8d2e3f4a5b6c`: columna `class_sessions.cancelled` y nuevas acciones de auditoría.
+
 ### Añadido (Dinero: quién debe)
 - **Pestaña Dinero** deja de ser un cartel "próximamente": muestra cuánto le deben a Kat en
   total y la lista de alumnos que vinieron a clase y la tienen en «€ Pendiente», de quien más
