@@ -6,6 +6,14 @@ Versionado: [SemVer](https://semver.org/lang/es/).
 
 ## [Sin publicar]
 
+### Añadido (Dinero: quién debe)
+- **Pestaña Dinero** deja de ser un cartel "próximamente": muestra cuánto le deben a Kat en
+  total y la lista de alumnos que vinieron a clase y la tienen en «€ Pendiente», de quien más
+  debe a quien menos (incluye inactivos). El importe es el mismo que "Debe X €" de la ficha.
+- Al tocar un alumno: sus clases sin pagar (fecha, hora, precio), **Cobrar** una a una o
+  **Cobrar todo**, y **Recordar** por WhatsApp con el mensaje ya escrito (Kat lo revisa y envía).
+- Los cobros desde Dinero quedan en el registro de actividad (sin datos personales).
+
 ### Corregido (tarifa por alumno)
 - **Al pasar lista se cobraba el precio de la clase, no la tarifa del alumno.** Ahora manda la
   tarifa de grupo de cada alumno (Reggio 21 €, Normal 30 €…). Solo hacia adelante. ADR-0008.

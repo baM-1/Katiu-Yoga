@@ -17,6 +17,8 @@ from katiu.core.config import get_settings
 from katiu.core.security import security_headers_middleware
 from katiu.core.templating import templates
 from katiu.core.web import LoginRequiredError, is_htmx
+from katiu.payments.routes import router as payments_router
+from katiu.payments.routes import write as payments_write
 from katiu.settings.routes import router as settings_router
 from katiu.settings.routes import write as settings_write
 from katiu.students.routes import router as students_router
@@ -58,6 +60,8 @@ def create_app() -> FastAPI:
         attendance_write,
         students_router,
         students_write,
+        payments_router,
+        payments_write,
         settings_router,
         settings_write,
         admin_router,
